@@ -4,12 +4,10 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>统计学习三——线性回归 | Jerry&#39;s BLOG</title>
+    <title>statistical learning | Jerry&#39;s BLOG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Jerry">
-    
-    <meta name="description" itemprop="description" content="主要介绍线性回归相关的内容。">
     
     
     
@@ -69,7 +67,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/03/Mooc-statlearning-LinReg/" title="统计学习三——线性回归" itemprop="url">统计学习三——线性回归</a>
+      <a href="/2015/06/03/Mooc/statistical-learning/" title="statistical learning" itemprop="url">statistical learning</a>
   </h1>
   <p class="article-author">By
     
@@ -77,7 +75,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-06-03T01:58:31.000Z" itemprop="datePublished">2015-06-03</time>
-    更新日期:<time datetime="2015-06-03T03:58:03.000Z" itemprop="dateModified">2015-06-03</time>
+    更新日期:<time datetime="2015-06-03T01:58:31.000Z" itemprop="dateModified">2015-06-03</time>
     
   </p>
 </header>
@@ -86,51 +84,19 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linear_Regression"><span class="toc-number">1.</span> <span class="toc-text">Linear Regression</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1_Simple_Linear_Regression"><span class="toc-number">1.0.1.</span> <span class="toc-text">1 Simple Linear Regression</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-number">1.0.2.</span> <span class="toc-text">2</span></a></li></ol></li></ol></li></ol>
+		
 		</div>
 		
-		<h1 id="Linear_Regression">Linear Regression</h1><h3 id="1_Simple_Linear_Regression">1 Simple Linear Regression</h3><p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg/2.png" alt="Alt text"><br>线性回归指的是加在各个特征上的权重是线性的，而特征本身是可以任意组合的，比如可以用$\hat{X_1} = {X_1}^2$当作新的特征，这样会得到更复杂的模型，但是仍然是线性回归。</p>
-<p>根据上面的结论继续推导下去，可以看出，一般的学习过程可以分为如下几步：<br>$$ 原始特征 \stackrel{特征提取}{\longrightarrow}特征空间 \stackrel{学习算法}{\longrightarrow}学习模型$$</p>
-<p>在学习的任务中，通常假设$Y=f(X_1, X_2, …, X_p)$, 即目标可以表示为特征的函数，而这个函数的形式，取决与学习算法的假设空间，比如线性回归中，假设空间就是p维欧几里得空间中的一个超平面（p-1维），这样的超平面有无数个，学习算法的目标通过一定的搜索策略，就是找到最接近f的那个。</p>
-<p>因此，一个机器学习的任务，主要涉及到两个方面的选择，其一是特征的选择，特征空间是否正确或合适，决定了学习任务是否可行，如果因变量都错了，那么学出来的模型肯定是错的，其二是学习算法的选择，学习算法决定了假设空间、搜索策略、以及优化目标，而这些决定了学习任务是否有效。<br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//3.png" alt="Alt text"><br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//4.png" alt="Alt text"><br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//5.png" alt="Alt text"><br>这里用到了矩阵的表示方法，将所有的参数分为两个部分，与x相关的部分为$\beta_1$（在线性模型中是个p维向量）又叫斜率，而常数项成为$\beta_0$又叫截距，而在有些可以看到，也可以将这两个参数合在一起，直接写为：<br>$$Y=\beta X$$<br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//8.png" alt="Alt text"><br>学习的目的是选择参数$\beta$，那么怎样来选择呢？这就需要定义怎样的参数才是好参数，这里使用RSS来定义，即在测试集每次预测的总误差的平方的和，在这里同SSE。</p>
-<p>最小化SST是存在解析解的，这就是最小二乘法。</p>
-<p>在多元回归分析中，有很多度量误差的量：</p>
-<ul>
-<li>SST（Total Sum of Squares）：总平方和，即原始数据和均值之差的平方和.<br>$$<br>  SST=\sum_1^n({y_i-\overline{y}})^2<br>$$</li>
-<li>SSR（Sum of Squares due to Regression）：回归平方和，即预测数据与原始数据均值之差的平方和。<br>$$SSR=\sum_1^n({\hat{y_i}-\overline{y}})^2<br>  $$</li>
-<li>SSE（Sum of Squares due to Error）：误差平方和，该统计参数计算的是拟合数据和原始数据对应点的误差的平方和。<br>$$SSE=\sum_1^n({y_i-\hat{y_i}})^2<br>$$</li>
-<li>MSE（Mean Squared Error）：均方差<br>  $$MSE=SSE/n<br>  $$</li>
-<li>RMSE(Root mean squared error)：均方根、标准差<br>  $$RMSE=\sqrt{MSE}<br>  $$</li>
-</ul>
-<p>可以证明，SST＝SSE+SSR，其中SSE代表了数据拟合的好坏，通过参数的选择可以优化，而SSR代表了模型的好坏，无法优化的项。</p>
-<p>因此常用SSE，或其变形MSE、RMSE来表示模型的优化目标，然后就可以利用最小二乘法来求解该问题。最小二乘法的解也可以表示为矩阵形式：<br>    $$<br>    \beta=(X^TX)^{-1}X^TY<br>    $$</p>
-<p>利用矩阵形式的解可以简化计算过程，但是要求$X^TX$的逆矩阵存在，利用matlab或其他工具计算逆矩阵时需要注意这点，一般都会提供一个计算广义逆矩阵的函数，这时就不用考虑是否可逆的问题了。</p>
-<p>但是，当数据很多时，计算逆矩阵的计算量很大，这时通常用迭代优化算法来求解。</p>
-<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//9.png" alt="Alt text"><br>点到回归线的垂直距离就是$e_i$</p>
-<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//11.png" alt="Alt text"><br>用standard error的概念来定义参数的置信度，根据定义可以发现：</p>
-<pre><code>-<span class="ruby"> 数据越分散，置信度越高。
-</span>-<span class="ruby"> 预测结果的误差越分散， 置信度越低。</span>
-</code></pre><p>因此可以用置信度来衡量不同数据集的好坏<br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//13.png" alt="Alt text"></p>
-<h3 id="2">2</h3>  
+		  
 	</div>
 		<footer class="article-footer clearfix">
 
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/linear-regression/">linear regression</a><a href="/tags/statistical-learning/">statistical learning</a>
-  </div>
-
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/machine-learning/">machine learning</a>
-</div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="/2015/06/03/Mooc-statlearning-LinReg/" data-title="统计学习三——线性回归 | Jerry&#39;s BLOG" data-tsina="null" class="share clearfix">
+  <div data-url="/2015/06/03/Mooc/statistical-learning/" data-title="statistical learning | Jerry&#39;s BLOG" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -139,19 +105,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/06/03/Mooc-statlearning-introduction/" title="统计学习一——介绍">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  统计学习一——介绍</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/06/02/first-blog/"  title="first blog">
+<a href="/2015/06/03/Mooc-statlearning-introduction/"  title="统计学习一——介绍">
  <strong>NEXT:</strong><br/> 
- <span>first blog
+ <span>统计学习一——介绍
 </span>
 </a>
 </div>
@@ -164,7 +122,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linear_Regression"><span class="toc-number">1.</span> <span class="toc-text">Linear Regression</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1_Simple_Linear_Regression"><span class="toc-number">1.0.1.</span> <span class="toc-text">1 Simple Linear Regression</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-number">1.0.2.</span> <span class="toc-text">2</span></a></li></ol></li></ol></li></ol>
+  
   </div>
 
 <div id="asidepart">
