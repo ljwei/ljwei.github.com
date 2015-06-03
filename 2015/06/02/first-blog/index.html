@@ -73,7 +73,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-06-02T10:09:00.000Z" itemprop="datePublished">2015-06-02</time>
-    更新日期:<time datetime="2015-06-02T11:08:25.000Z" itemprop="dateModified">2015-06-02</time>
+    更新日期:<time datetime="2015-06-03T01:26:15.000Z" itemprop="dateModified">2015-06-03</time>
     
   </p>
 </header>
@@ -90,6 +90,8 @@
 <p>利用github pages和Hexo搭建好了本博客！</p>
 <p>有点小激动，特地测试一下。</p>
 <h3 id="latex">latex</h3><p>$$<br>\sum<br>$$</p>
+<p>Simple inline $a = b + c$</p>
+<p>This equation <span>$\cos 2\theta = \cos^2 \theta - \sin^2 \theta =  2 \cos^2 \theta - 1$</span><!-- Has MathJax --> is inline.</p>
 <h3 id="code">code</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="string">'hello, world!'</span></span><br></pre></td></tr></table></figure>
   
 	</div>
@@ -324,5 +326,35 @@ $(document).ready(function(){
 
 
 
-  </body>
+  <!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
 </html>
