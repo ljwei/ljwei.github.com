@@ -77,7 +77,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-06-03T01:58:31.000Z" itemprop="datePublished">2015-06-03</time>
-    更新日期:<time datetime="2015-06-03T06:10:47.000Z" itemprop="dateModified">2015-06-03</time>
+    更新日期:<time datetime="2015-06-03T06:18:00.000Z" itemprop="dateModified">2015-06-03</time>
     
   </p>
 </header>
@@ -86,10 +86,10 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview_of_Statistical_Learning"><span class="toc-number">1.</span> <span class="toc-text">Overview of Statistical Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1_Introduction_to_Regression_Models"><span class="toc-number">1.0.1.</span> <span class="toc-text">1 Introduction to Regression Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2_Dimensionality_and_Structured_Models"><span class="toc-number">1.0.2.</span> <span class="toc-text">2 Dimensionality and Structured Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3_Model_Selection_and_Bias-Variance_Tradeoff"><span class="toc-number">1.0.3.</span> <span class="toc-text">3 Model Selection and Bias-Variance Tradeoff</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4_Classification"><span class="toc-number">1.0.4.</span> <span class="toc-text">4 Classification</span></a></li></ol></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview_of_Statistical_Learning"><span class="toc-number">1.</span> <span class="toc-text">Overview of Statistical Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1_Introduction_to_Regression_Models"><span class="toc-number">1.1.</span> <span class="toc-text">1 Introduction to Regression Models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2_Dimensionality_and_Structured_Models"><span class="toc-number">1.2.</span> <span class="toc-text">2 Dimensionality and Structured Models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3_Model_Selection_and_Bias-Variance_Tradeoff"><span class="toc-number">1.3.</span> <span class="toc-text">3 Model Selection and Bias-Variance Tradeoff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4_Classification"><span class="toc-number">1.4.</span> <span class="toc-text">4 Classification</span></a></li></ol></li></ol>
 		</div>
 		
-		<h1 id="Overview_of_Statistical_Learning">Overview of Statistical Learning</h1><h3 id="1_Introduction_to_Regression_Models">1 Introduction to Regression Models</h3><p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/0.png" alt="Alt text"></p>
+		<h1 id="Overview_of_Statistical_Learning">Overview of Statistical Learning</h1><h2 id="1_Introduction_to_Regression_Models">1 Introduction to Regression Models</h2><p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/0.png" alt="Alt text"></p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/1.png" alt="Alt text"></p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/2.png" alt="Alt text"></p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/3.png" alt="Alt text"></p>
@@ -98,7 +98,7 @@
 <p>一种直接的思路就是，在求均值时，放大X的范围，这样就可以获得更多相似的数据了，这种思路更加完善就是kNN了。</p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/10.png" alt="Alt text"><br>kNN比较适用于维度较低以及数据量较大时的情况。</p>
 <p>这里维度的高低与数据量的大小是一个相对的概念，维度越高，需要的数据量就越大，反之亦然。</p>
-<h3 id="2_Dimensionality_and_Structured_Models">2 Dimensionality and Structured Models</h3><p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/11.png" alt="Alt text"><br>右图显示了，想获得同样比例的数据，在高维空间中半径要大得多，而半径越大，说明相似性就越差，这样得到的结果也会越不好。</p>
+<h2 id="2_Dimensionality_and_Structured_Models">2 Dimensionality and Structured Models</h2><p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/11.png" alt="Alt text"><br>右图显示了，想获得同样比例的数据，在高维空间中半径要大得多，而半径越大，说明相似性就越差，这样得到的结果也会越不好。</p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/12.png" alt="Alt text"><br>由于kNN这种基于实例的学习，会遇到维度灾难的问题，因此引出了结构模型的概念。</p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/13.png" alt="Alt text"></p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/14.png" alt="Alt text"></p>
@@ -108,7 +108,7 @@
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/20.png" alt="Alt text"><br>在机器学习中，总是要做出很多平衡和选择。</p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/21.png" alt="Alt text"><br>上面显示了一些算法在灵活性和可解释性上面的平衡。</p>
 <p>SVM不负众望，在灵活性方面走在了最前面，由于用到的数学、最优化等理论知识过多，因此可解释性只能呵呵了，尤其是与kernel function结合之后，无比强大，同时也更复杂了。</p>
-<h3 id="3_Model_Selection_and_Bias-Variance_Tradeoff">3 Model Selection and Bias-Variance Tradeoff</h3><p> <img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/22.png" alt="Alt text"><br>通常使用MSE来度量模型的好坏，但是由于我们在训练时，使用的优化目标通常也是MSE，因此训练的结果肯定对应MSE小的模型，这样在训练集上求MSE是没有意义的，常用的做法是用测试集。</p>
+<h2 id="3_Model_Selection_and_Bias-Variance_Tradeoff">3 Model Selection and Bias-Variance Tradeoff</h2><p> <img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/22.png" alt="Alt text"><br>通常使用MSE来度量模型的好坏，但是由于我们在训练时，使用的优化目标通常也是MSE，因此训练的结果肯定对应MSE小的模型，这样在训练集上求MSE是没有意义的，常用的做法是用测试集。</p>
 <p>如果还需要进一步在模型中做选择，然后再度量好坏，那么就需要增加验证数据集了。具体使用验证集的方法有很多。</p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/23.png" alt="Alt text"><br>利用模型复杂度-MSE曲线图，可以来判断模型的拟合程度。从而选择最好的模型。</p>
 <p>可以看出，$MSE<em>{tr}$总是不断减小的，这是也是显而易见的，因为我们的目标函数就是$\min  Mse</em>{tr}$当模型越复杂时，肯定能对训练集拟合得更好。但是在测试集上的$Mse<em>{te}$是先减小后增大的，虽然在欠拟合和过拟合时，$Mse</em>{te}$都很大，但是造成误差的原因不同。</p>
@@ -116,7 +116,7 @@
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/25.png" alt="Alt text"><br>虽然$Mse<em>{te}$总是先降后增，$Mse</em>{tr}$总是一直下降，但是面对不同的模型和数据，表现的细节会不同。</p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/26.png" alt="Alt text"><br>将误差分为Bias（偏差）和Var（方差）两种。</p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/27.png" alt="Alt text"><br>上面显示了Bias和Var，随模型复杂度的变化情况。</p>
-<h3 id="4_Classification">4 Classification</h3><p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/28.png" alt="Alt text"></p>
+<h2 id="4_Classification">4 Classification</h2><p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/28.png" alt="Alt text"></p>
 <p>回归算法基本都能用于分类任务，只用将线性权重改为示性函数，然后求$argmax_{C_i}$就可以了。</p>
 <p>但是分类算法中有一类比较特殊的，只能用于分类任务，那就是用贝叶斯知识的相关模型。</p>
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/overview/29.png" alt="Alt text"></p>
@@ -182,7 +182,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview_of_Statistical_Learning"><span class="toc-number">1.</span> <span class="toc-text">Overview of Statistical Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1_Introduction_to_Regression_Models"><span class="toc-number">1.0.1.</span> <span class="toc-text">1 Introduction to Regression Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2_Dimensionality_and_Structured_Models"><span class="toc-number">1.0.2.</span> <span class="toc-text">2 Dimensionality and Structured Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3_Model_Selection_and_Bias-Variance_Tradeoff"><span class="toc-number">1.0.3.</span> <span class="toc-text">3 Model Selection and Bias-Variance Tradeoff</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4_Classification"><span class="toc-number">1.0.4.</span> <span class="toc-text">4 Classification</span></a></li></ol></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview_of_Statistical_Learning"><span class="toc-number">1.</span> <span class="toc-text">Overview of Statistical Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1_Introduction_to_Regression_Models"><span class="toc-number">1.1.</span> <span class="toc-text">1 Introduction to Regression Models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2_Dimensionality_and_Structured_Models"><span class="toc-number">1.2.</span> <span class="toc-text">2 Dimensionality and Structured Models</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3_Model_Selection_and_Bias-Variance_Tradeoff"><span class="toc-number">1.3.</span> <span class="toc-text">3 Model Selection and Bias-Variance Tradeoff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4_Classification"><span class="toc-number">1.4.</span> <span class="toc-text">4 Classification</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
@@ -233,7 +233,7 @@
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">6</span></li></ul>
   </div>
 
 
