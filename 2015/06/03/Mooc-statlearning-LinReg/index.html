@@ -77,7 +77,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-06-03T01:58:31.000Z" itemprop="datePublished">2015-06-03</time>
-    更新日期:<time datetime="2015-06-03T06:25:11.000Z" itemprop="dateModified">2015-06-03</time>
+    更新日期:<time datetime="2015-06-03T06:43:54.000Z" itemprop="dateModified">2015-06-03</time>
     
   </p>
 </header>
@@ -92,7 +92,11 @@
 		<h2 id="1_Simple_Linear_Regression">1 Simple Linear Regression</h2><p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg/2.png" alt="Alt text"><br>线性回归指的是加在各个特征上的权重是线性的，而特征本身是可以任意组合的，比如可以用<span>$\hat{X_1} = {X_1}^2$</span><!-- Has MathJax -->当作新的特征，这样会得到更复杂的模型，但是仍然是线性回归。</p>
 <p>根据上面的结论继续推导下去，可以看出，一般的学习过程可以分为如下几步：<br>$$ 原始特征 \stackrel{特征提取}{\longrightarrow}特征空间 \stackrel{学习算法}{\longrightarrow}学习模型$$</p>
 <p>在学习的任务中，通常假设$Y=f(X_1, X_2, …, X_p)$, 即目标可以表示为特征的函数，而这个函数的形式，取决与学习算法的假设空间，比如线性回归中，假设空间就是p维欧几里得空间中的一个超平面（p-1维），这样的超平面有无数个，学习算法的目标通过一定的搜索策略，就是找到最接近f的那个。</p>
-<p>因此，一个机器学习的任务，主要涉及到两个方面的选择，其一是特征的选择，特征空间是否正确或合适，决定了学习任务是否可行，如果因变量都错了，那么学出来的模型肯定是错的，其二是学习算法的选择，学习算法决定了假设空间、搜索策略、以及优化目标，而这些决定了学习任务是否有效。<br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//3.png" alt="Alt text"><br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//4.png" alt="Alt text"><br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//5.png" alt="Alt text"><br>这里用到了矩阵的表示方法，将所有的参数分为两个部分，与x相关的部分为$\beta_1$（在线性模型中是个p维向量）又叫斜率，而常数项成为$\beta_0$又叫截距，而在有些可以看到，也可以将这两个参数合在一起，直接写为：<br>$$Y=\beta X$$<br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//8.png" alt="Alt text"><br>学习的目的是选择参数$\beta$，那么怎样来选择呢？这就需要定义怎样的参数才是好参数，这里使用RSS来定义，即在测试集每次预测的总误差的平方的和，在这里同SSE。</p>
+<p>因此，一个机器学习的任务，主要涉及到两个方面的选择，其一是特征的选择，特征空间是否正确或合适，决定了学习任务是否可行，如果因变量都错了，那么学出来的模型肯定是错的，其二是学习算法的选择，学习算法决定了假设空间、搜索策略、以及优化目标，而这些决定了学习任务是否有效。</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//3.png" alt="Alt text"></p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//4.png" alt="Alt text"></p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//5.png" alt="Alt text"><br>这里用到了矩阵的表示方法，将所有的参数分为两个部分，与x相关的部分为$\beta_1$（在线性模型中是个p维向量）又叫斜率，而常数项成为$\beta_0$又叫截距，而在有些可以看到，也可以将这两个参数合在一起，直接写为：<br>$$Y=\beta X$$</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//8.png" alt="Alt text"><br>学习的目的是选择参数$\beta$，那么怎样来选择呢？这就需要定义怎样的参数才是好参数，这里使用RSS来定义，即在测试集每次预测的总误差的平方的和，在这里同SSE。</p>
 <p>最小化SST是存在解析解的，这就是最小二乘法。</p>
 <p>在多元回归分析中，有很多度量误差的量：</p>
 <ul>
@@ -110,7 +114,8 @@
 <p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//11.png" alt="Alt text"><br>用standard error的概念来定义参数的置信度，根据定义可以发现：</p>
 <pre><code>-<span class="ruby"> 数据越分散，置信度越高。
 </span>-<span class="ruby"> 预测结果的误差越分散， 置信度越低。</span>
-</code></pre><p>因此可以用置信度来衡量不同数据集的好坏<br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//13.png" alt="Alt text"></p>
+</code></pre><p>因此可以用置信度来衡量不同数据集的好坏</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Statlearning/linreg//13.png" alt="Alt text"></p>
 <h2 id="2">2</h2>  
 	</div>
 		<footer class="article-footer clearfix">
@@ -176,7 +181,7 @@
 	<p class="asidetitle">分类</p>
 		<ul>
 		
-			<li><a href="/categories/machine-learning/" title="machine learning">machine learning<sup>3</sup></a></li>
+			<li><a href="/categories/machine-learning/" title="machine learning">machine learning<sup>4</sup></a></li>
 		
 		</ul>
 </div>
@@ -187,7 +192,11 @@
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
+			<li><a href="/tags/Big-Data/" title="Big Data">Big Data<sup>1</sup></a></li>
+		
 			<li><a href="/tags/classification/" title="classification">classification<sup>1</sup></a></li>
+		
+			<li><a href="/tags/data-mining/" title="data mining">data mining<sup>1</sup></a></li>
 		
 			<li><a href="/tags/kNN/" title="kNN">kNN<sup>1</sup></a></li>
 		
@@ -207,7 +216,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/classification/" style="font-size: 10px;">classification</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/linear-regression/" style="font-size: 10px;">linear regression</a> <a href="/tags/regression/" style="font-size: 10px;">regression</a> <a href="/tags/statistical-learning/" style="font-size: 20px;">statistical learning</a> <a href="/tags/test/" style="font-size: 10px;">test</a>
+       <a href="/tags/Big-Data/" style="font-size: 10px;">Big Data</a> <a href="/tags/classification/" style="font-size: 10px;">classification</a> <a href="/tags/data-mining/" style="font-size: 10px;">data mining</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/linear-regression/" style="font-size: 10px;">linear regression</a> <a href="/tags/regression/" style="font-size: 10px;">regression</a> <a href="/tags/statistical-learning/" style="font-size: 20px;">statistical learning</a> <a href="/tags/test/" style="font-size: 10px;">test</a>
     </div>
   </div>
 
@@ -215,7 +224,7 @@
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">6</span></li></ul>
   </div>
 
 

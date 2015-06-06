@@ -1,0 +1,404 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>海量数据挖掘学习笔记一——数据挖掘基本概念 | Jerry&#39;s BLOG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Jerry">
+    
+    <meta name="description" itemprop="description" content="本篇主要介绍数据挖掘中的一些基本概念。">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Jerry&#39;s BLOG" title="Jerry&#39;s BLOG"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Jerry&#39;s BLOG">Jerry&#39;s BLOG</a></h1>
+				<h2 class="blog-motto">machine learning, python</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/05/Mooc-MMDS-1-basic-concepts/" title="海量数据挖掘学习笔记一——数据挖掘基本概念" itemprop="url">海量数据挖掘学习笔记一——数据挖掘基本概念</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="" title="Jerry">Jerry</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-06-05T13:40:50.000Z" itemprop="datePublished">2015-06-05</time>
+    更新日期:<time datetime="2015-06-06T03:24:50.000Z" itemprop="dateModified">2015-06-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据挖掘的定义"><span class="toc-number">1.</span> <span class="toc-text">数据挖掘的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关概念的比较"><span class="toc-number">2.</span> <span class="toc-text">相关概念的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据挖掘的统计限制"><span class="toc-number">3.</span> <span class="toc-text">数据挖掘的统计限制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关主题"><span class="toc-number">4.</span> <span class="toc-text">相关主题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#词语在文档中的重要性"><span class="toc-number">4.1.</span> <span class="toc-text">词语在文档中的重要性</span></a></li></ol></li></ol>
+		</div>
+		
+		<p>学习了一些机器学习的理论后，希望接触一些机器学习方面比较实用的知识，发现了《Mining of Massive Datasets》这本书，浏览了一下，感觉还不错，而且包含了很多当下比较火的概念，比如：MapReduce，BigData，PageRank等等，于是决定认真学习一些。利用本博来记录学习的过程，一来是锻炼总结知识的能力，二来也是万一有幸帮到别人，那就再高兴不过了。</p>
+<p>另外Coursera上有与这本书配套的课程：<a href="https://class.coursera.org/mmds-001" target="_blank" rel="external">Coursera MMDS</a>，<br>stanford上也有相关的课程，相关的信息以及资源都可以在本书官网上找到：<a href="http://www.mmds.org/" target="_blank" rel="external">http://www.mmds.org/</a></p>
+<h2 id="数据挖掘的定义">数据挖掘的定义</h2><p>最广为接受的定义是，数据挖掘是数据模型的发现过程。而常用的数据建模方法有：</p>
+<ul>
+<li>通过其生成所可能遵从的统计模型来建模。（利用统计机器学习的方法进行数据挖掘）</li>
+<li>对数据进行简洁的近似汇总描述。（传统的数据挖掘）</li>
+<li>从数据中抽取出最突出的特征来代表数据。（现在主流的数据挖掘）</li>
+</ul>
+<p>常用的特征抽取类型有两种：</p>
+<ul>
+<li>频繁项集（frequent itemset）：常用于购物篮问题，比如经典的啤酒与尿布。</li>
+<li>相似项（similar item）：常用于推荐系统。</li>
+</ul>
+<h2 id="相关概念的比较">相关概念的比较</h2><p>有很多与数据挖掘相关的术语，例如机器学习、统计分析、人工智能、模式识别等，它们之间的关系也是错综复杂，很难完全界定开，尤其是数据挖掘、机器学习和模式识别这三者，内容上有很多重复。而作者认为：</p>
+<ul>
+<li>机器学习擅长的典型场景是人们对数据中的寻找目标几乎一无所知。</li>
+<li>数据挖掘使用于挖掘的目标能直接地描述时，比如有特殊的结构或关键词。</li>
+</ul>
+<p>台大讲授机器学习的林老师关于这方面的ppt是这样的：</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/basicConcept/ml-dm.jpg" alt="pic"></p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/basicConcept/ml-ai.jpg" alt="pic"></p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/basicConcept/ml-statistics.jpg" alt="pic"></p>
+<p>总结下来就是：</p>
+<ul>
+<li><strong>机器学习</strong>：利用数据从假设空间中找到一个与目标f最接近的假设g。</li>
+<li><strong>数据挖掘</strong>：在大量的数据中找到感兴趣的特性，可以看作是机器学习的一个应用方向。</li>
+<li><strong>人工智能</strong>：机器学习能实现人工智能。</li>
+<li><strong>统计</strong>：利用统计的方法可以实现机器学习。</li>
+</ul>
+<p>下面引用知乎上张昊的一个回答：</p>
+<blockquote>
+<p>机器学习、统计分析、数据挖掘、神经网络、人工智能、模式识别，很难说谁包含于谁，只能分开说每一个概念的意义，谁服务于谁。</p>
+<p>数据挖掘是一种概念，从数据中挖掘到有意义的信息。<br>很多人认为数据挖掘是新学科，是基于大数据，其实不然，如果给你一个数据说李嘉诚有100多亿美元，再给你一个数据是全国平均人均可支配收入水平是13279元人民币，你能挖掘出一个信息叫，李嘉诚很有钱，这也是数据挖掘。只不过很小白而已。</p>
+<p>模式识别是目的，识别出一种模式，比如两个眼睛一个鼻子的是人脸的模式。如果不通过电脑，手工的通过计算来识别模式，也属于模式识别</p>
+<p>机器学习是一种方法，通常用来进行模式识别，用机器去学习不直观的数据得到模式，这其中会需要用到各种各样的知识，比如统计分析的知识。</p>
+<p>人工智能，这个概念就大了，这个概念是想要人工制造出和人类一样的智能，所以很多人就想出了机器人这么一个科幻产物，有人类的智能，并且依托于机器的强大运算能力。事实上，人工智能也不一定要和电脑挂钩的，只不过现在只有电脑有这么强大的计算能力，如果有一天生物科技能够突破，说不定也能实现。（纯属YY）</p>
+<p>神经网络，这是学习算法中的一个很火的模型，它号称结合了多学科，模拟了人的神经过程，是很好的一种学习方法，可以说这个是基于统计学范畴的。</p>
+<p>有什么疑问再问我～</p>
+</blockquote>
+<h2 id="数据挖掘的统计限制">数据挖掘的统计限制</h2><p>数据挖掘涉及到几个重要的问题：</p>
+<ul>
+<li>隐私问题：随着能收集到的数据越来越多，互联网上的每个人将不在透明，指望企业遵守道德保持良心，保护个人隐私，至少在中国是不可能的。</li>
+<li>数据是否可信的问题：数据只是客观的描述，并不能显示出因果关系。因此当你用数据挖掘的结果来推断因果关系时，很容易犯错。而如果只关注挖掘结果的统计特性，那么就可以很好地利用了。</li>
+<li>邦弗朗尼原理：统计上的一个概念，大概意思是，在考察数据时，如果将某些对象视为数据的有趣特征，而这些对象中的许多都可能会在随机数据中出现，那么这些显著的特征就不可依赖。对与那些实际中并不充分罕见的特征来说，上述观察结果限制了从这些数据特征中进行挖掘的能力。</li>
+</ul>
+<h2 id="相关主题">相关主题</h2><h3 id="词语在文档中的重要性">词语在文档中的重要性</h3><p>数据挖掘很多时候都需要根据主题对文档进行分类。但是如何进行分类呢？</p>
+<p>第一步往往是先找到重要的词语，直接的想法就是，认为出现频率最高的词语最重要，但是刚好相反，出现频率最高的往往是‘the’、’and‘这样的没有含义的词。因此在实际处理中，往往先过滤掉这些常见词。</p>
+<p>那么我们找罕见词可以吗？如果一篇文章反复提到一些罕见词，那么很有可能这些词能代表文章主题，因此可以用过滤后的TF（Term Frequency，词频）来表示词语重要性。公式如下，其中$f<em>{ij}$表示词i在文档j中出现的频率，这是归一化的结果，出现频率最高的词TF值为1.<br>$$<br>TF</em>{ij} = \frac{f<em>{ij}}{\max_k{f</em>{kj}}}<br>$$</p>
+<p>但是只用TF并不准确，为了更好地区分出文档的主题，表现主题的词应该在其他文档中更少出现，这样的词才是更重要的。这种重要性用逆文档频率（IDF， Inverse Document Frequency）来表示。公式如下，其中$n_i$表示词i在所有文档的$n_i$篇中出现。<br>$$<br>IDF_i = \log_2{\frac{N}{n_i}}<br>$$</p>
+<p>TF和IDF一般综合起来使用，因此词i在文档j中的得分为$TF_{ij}*IDF_i$。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Big-Data/">Big Data</a><a href="/tags/data-mining/">data mining</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/machine-learning/">machine learning</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="/2015/06/05/Mooc-MMDS-1-basic-concepts/" data-title="海量数据挖掘学习笔记一——数据挖掘基本概念 | Jerry&#39;s BLOG" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/06/03/Mooc-statlearning-introduction/"  title="统计学习一——介绍">
+ <strong>NEXT:</strong><br/> 
+ <span>统计学习一——介绍
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据挖掘的定义"><span class="toc-number">1.</span> <span class="toc-text">数据挖掘的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关概念的比较"><span class="toc-number">2.</span> <span class="toc-text">相关概念的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据挖掘的统计限制"><span class="toc-number">3.</span> <span class="toc-text">数据挖掘的统计限制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关主题"><span class="toc-number">4.</span> <span class="toc-text">相关主题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#词语在文档中的重要性"><span class="toc-number">4.1.</span> <span class="toc-text">词语在文档中的重要性</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/machine-learning/" title="machine learning">machine learning<sup>4</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Big-Data/" title="Big Data">Big Data<sup>1</sup></a></li>
+		
+			<li><a href="/tags/classification/" title="classification">classification<sup>1</sup></a></li>
+		
+			<li><a href="/tags/data-mining/" title="data mining">data mining<sup>1</sup></a></li>
+		
+			<li><a href="/tags/kNN/" title="kNN">kNN<sup>1</sup></a></li>
+		
+			<li><a href="/tags/linear-regression/" title="linear regression">linear regression<sup>1</sup></a></li>
+		
+			<li><a href="/tags/regression/" title="regression">regression<sup>1</sup></a></li>
+		
+			<li><a href="/tags/statistical-learning/" title="statistical learning">statistical learning<sup>3</sup></a></li>
+		
+			<li><a href="/tags/test/" title="test">test<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Big-Data/" style="font-size: 10px;">Big Data</a> <a href="/tags/classification/" style="font-size: 10px;">classification</a> <a href="/tags/data-mining/" style="font-size: 10px;">data mining</a> <a href="/tags/kNN/" style="font-size: 10px;">kNN</a> <a href="/tags/linear-regression/" style="font-size: 10px;">linear regression</a> <a href="/tags/regression/" style="font-size: 10px;">regression</a> <a href="/tags/statistical-learning/" style="font-size: 20px;">statistical learning</a> <a href="/tags/test/" style="font-size: 10px;">test</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">6</span></li></ul>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+      <li><a href="http://yangjian.me" target="_blank" title="YangJian">Alimon's Blog</a></li>
+      <li><a href="http://hexo.io" target="_blank" title="Hexo">Hexo</a></li>
+    </ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, world! <br/>
+			Good Good Study, Day Day Up!</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="" target="_blank" title="Jerry">Jerry</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
