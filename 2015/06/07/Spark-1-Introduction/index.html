@@ -1,0 +1,637 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="big data,spark," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> Spark系列一——Spark简介 // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Spark系列一——Spark简介
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-07
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/spark/">spark</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h2 id="Spark简介">Spark简介</h2><p>随着数据规模的不断增大，存储成本的不断降低，而单机处理这些数据变得不现实，于是涌现出了很多分布式计算框架，包括MapReduce、Pregel、Storm、Dryad、Scope、Spark等等。</p>
+<p>这些分布式计算框架都各有特点，适用与不同的场景。与其他的框架相比，Spark主要特点就是，它是基于内存的。基于内存主要有两个好处：</p>
+<ul>
+<li>内存存取更快，这是显然的。</li>
+<li>把中间结果保存在内存中，意味着不用进行序列化（serialization，将其转换成可以存储到硬盘上的格式）和反序列化（deserialization）。当数据很大时，序列化和反序列化是相当耗时的。</li>
+</ul>
+<p>Hadoop MapReduce和Spark之间的主要区别可以用这张图来概括：</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Spark/introduction/43.png" alt="pic"></p>
+<p>根据这些特点可以看出，Spark非常适用于以下任务：</p>
+<ul>
+<li>需要反复迭代的任务：如machine learning</li>
+<li>交互式或实时的任务</li>
+</ul>
+<p>想了解Spark的原理，可以看下面两篇论文，：</p>
+<ul>
+<li><a href="http://people.csail.mit.edu/matei/papers/2010/hotcloud_spark.pdf" target="_blank" rel="external">Spark: Cluster Computing with Working Sets, Matei Zaharia, Mosharaf Chowdhury, Michael J. Franklin, Scott Shenker, Ion Stoica. USENIX HotCloud (2010)</a></li>
+<li><a href="http://usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf" target="_blank" rel="external">Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing, Matei Zaharia, Mosharaf Chowdhury, Tathagata Das, Ankur Dave, Justin Ma, Murphy McCauley, Michael J. Franklin, Scott Shenker, Ion Stoica. NSDI (2012)</a></li>
+</ul>
+<h2 id="Spark基础">Spark基础</h2><p>下面以pySpark（pySpark是Spark提供的python编程借口）为例，介绍Spark的基本用法和基础知识。</p>
+<h3 id="框架">框架</h3><p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Spark/introduction/3.png" alt="pic"><br>Spark主要有两类程序：</p>
+<ul>
+<li>driver：启动任务的进程</li>
+<li>worker：具体执行任务的进程，如果是分布式环境，那么driver会将任务通过集群的master分配到各个节点上，如果是单机环境，那么worker就是本地线程，因此在单机环境下，一般会启动与机器cpu核数相同的worker数量，这样能更高效利用本地计算资源。</li>
+</ul>
+<p>driver会根据程序代码生成RDDs，这些RDDs中包含了该任务的所有的信息，当需要计算的时候（action类型的函数调用时），driver将RDDs分发到各个worker，worker根据得到的RDD执行相应的任务。</p>
+<h3 id="Spark_Context">Spark Context</h3><p>启动Spark项目，driver需要先生成SparkContext对象，该对象包含了关于该应用的所有的配置信息。其中master参数决定了如何访问cluster以及使用怎样的cluster。</p>
+<ul>
+<li><strong>local</strong>  本地运行，不并行</li>
+<li><strong>local[k]</strong>  本地运行，启动k个线程</li>
+<li><strong>spark://host:port</strong> 连接到指定的Spark standalone cluster</li>
+</ul>
+<h3 id="RDD（Resilient_Distributed_Datasets）">RDD（Resilient Distributed Datasets）</h3><p>RDD是Spark的核心内容，包含了任务的完整信息，主要有以下特点：</p>
+<ul>
+<li><strong>一旦创建之后，就不能修改</strong>，有利于容错</li>
+<li>保存了lineage信息，可以高效地从错误中恢复</li>
+<li>对与RDD中数据的计算是并行的</li>
+</ul>
+<p>在网上找到的一段关于Lineage的解释，说的很清晰：</p>
+<blockquote>
+<p>Lineage：利用内存加快数据加载在众多的其它的In-Memory类数据库或Cache类系统中也有实现，Spark的主要区别在于它处理分布式运算环境下的数据容错性（节点实效/数据丢失）问题时采用的方案。为了保证RDD中数据的鲁棒性，RDD数据集通过所谓的血统关系(Lineage)记住了它是如何从其它RDD中演变过来的。相比其它系统的细颗粒度的内存数据更新级别的备份或者LOG机制，RDD的Lineage记录的是粗颗粒度的特定数据变换（Transformation）操作（filter, map, join etc.)行为。当这个RDD的部分分区数据丢失时，它可以通过Lineage获取足够的信息来重新运算和恢复丢失的数据分区。这种粗颗粒的数据模型，限制了Spark的运用场合，但同时相比细颗粒度的数据模型，也带来了性能的提升。</p>
+<p>总之，Spark的核心思路就是将数据集缓存在内存中加快读取速度，同时用lineage关联的RDD以较小的性能代价保证数据的鲁棒性。</p>
+</blockquote>
+<p>创建RDD的方法有如下几种：</p>
+<ul>
+<li>对python中的collections类型的数据进行并行化（调用parallelize函数）</li>
+<li>从一个RDD转换到一个新的RDD（通过transform类型的函数，例如map、flatMap等等）</li>
+<li>从现有的文件系统中创建（可以是一般系统上的文本文件，或是HDFS上的文件）</li>
+</ul>
+<p>创建RDD时可以指定分区（partitions）数量，这个partition对应一个worker。</p>
+<h3 id="transformations和actions">transformations和actions</h3><p>关于RDD的操作分成了两类：transformations和actions，这两类操作最主要的区别在于：</p>
+<ul>
+<li><strong>transformation是惰性求值的</strong>，也就是说，对一个RDD调用transformation类型的操作后，其实相应的计算并没有发生，只是新创建了一个RDD，而这个RDD的lineage中会记录下这个transformation的信息，当正在计算的时候，可以就可以根据lineage信息进行计算了。</li>
+<li><strong>action是立即求值的</strong>，一个RDD调用action类型的操作后，driver会分析RDD中lineage信息，并进行优化，然后将任务分发给相应数量的worker，从而真正执行相应的操作，然后将结果返回给driver。</li>
+</ul>
+<p>因此一般的Spark任务的流程就是：</p>
+<span>$$File or Collections \stackrel{Create}{\longrightarrow} RDD \stackrel{transform}{\longrightarrow} new RDD \stackrel{action}{\longrightarrow} results$$</span><!-- Has MathJax -->
+<p>常见的transformation如下：</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Spark/introduction/44.png" alt="pic"></p>
+<p>常见的action如下：</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Spark/introduction/45.png" alt="pic"></p>
+<h3 id="key-value_RDD">key-value RDD</h3><p>和MapReduce类似，Spark也有支持key-value类型的RDD，就是是说RDD中的每个元素都是一个键值对。</p>
+<p>支持key-value的transformation如下：</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/Spark/introduction/46.png" alt="pic"></p>
+<p>需要注意的是groupByKey函数需要慎重使用，因为会导致大量的元素移动，影响效率。</p>
+<h3 id="闭包">闭包</h3><p>在transformation和action的很多操作中，都需要传递一个函数进去，来完成特定的功能，这些函数可能会用到一些资源（如全局变量等），为了让每个worker都可以顺利地执行这些任务，因此需要将这些函数和所用到的全局变量一起打包，以保证在任何地方都可以使用该函数。</p>
+<p>简单来说，闭包就是保证一个函数可以自给自足。因此，Spark会自动为这些用到的函数和全局变量创建闭包，然后将闭包发给每个worker。</p>
+<p>但是这样会出现一些问题：</p>
+<ul>
+<li>闭包是每次任务都会重新下发，对于比较大的资源，会影响效率，而且也没必要，很多情况下这个资源都是不会变的。</li>
+<li>闭包的传递是单向的，只能由driver到worker，因此worker中的变量的变化无法传递给driver。</li>
+<li>driver会向每个worker都下发一个闭包，各个worker之间是无法通信的，因此如果想设置一个全局计数器是不可能的。</li>
+</ul>
+<p>真是由于这些原因，pySpark中引入了共享变量。</p>
+<h3 id="共享变量">共享变量</h3><p>为了解决上面的第一个问题，引入了广播变量（Broadcast Variables）：</p>
+<ul>
+<li>广播变量会缓存在每个worker上，这样不用每个任务都下发了</li>
+<li>对worker来说，广播变量是只读的，保证了对每个worker来说，广播变量的一致性。</li>
+</ul>
+<p>创建广播变量的方法：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">broadcastVar = sc.<span class="function"><span class="title">broadcast</span><span class="params">([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span></span></span><br></pre></td></tr></table></figure></p>
+<p>在worker中访问广播变量：<br><figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">broadcastVar.<span class="keyword">value</span></span><br></pre></td></tr></table></figure></p>
+<p>为了解决第二个和第三个问题，引入了累计变量（Accumulators）：</p>
+<ul>
+<li>对worker来说，累计变量只能写，不能读</li>
+<li>只有driver可以访问累计变量</li>
+<li>最终所有worker上关于累计变量的修改，都会反应到driver上</li>
+</ul>
+<p>Accumulators支持的类型有:integers, double, long, float<br><strong>使用Accumulators还有一个需要注意的是，由于惰性求值以及RDD可能会丢失、重建，因此transformation中对Accumulators的更新会发生多少次是不确定的，但是Spark保证action中对Accumulators的更新每个任务都只发生一次。</strong></p>
+<p>创建累计变量方法：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">blankLines = sc.<span class="function"><span class="title">accumulator</span><span class="params">(<span class="number">0</span>)</span></span></span><br></pre></td></tr></table></figure>
+<p>在函数中需要使用时，要先声明为global变量：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">countBlankLine</span><span class="params">(line)</span>:</span></span><br><span class="line">	<span class="keyword">global</span> blankLines</span><br><span class="line">	<span class="keyword">if</span> line == <span class="string">''</span>:</span><br><span class="line">		blankLines += <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>worker访问累计变量的方法：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">"Blank lines: <span class="variable">%d</span>"</span> % blankLines.value</span><br></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2><p>总体来说，Spark的内容并不复杂，上手也相对容易，而且总体的设计思路也非常清晰，就是为了解决一般的分布式计算框架，如MapReduce，在对迭代和交互式任务处理上的不足。然而现在machine learning越来越火，交互式的开发也越来越普及，从而极大地促进了Spark的推广。</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/big-data/"> #big data </a>
+          
+            <a href="/tags/spark/"> #spark </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/06/hello-world/">Hello World</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark简介"><span class="nav-number">1.</span> <span class="nav-text">Spark简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark基础"><span class="nav-number">2.</span> <span class="nav-text">Spark基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#框架"><span class="nav-number">2.1.</span> <span class="nav-text">框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark_Context"><span class="nav-number">2.2.</span> <span class="nav-text">Spark Context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDD（Resilient_Distributed_Datasets）"><span class="nav-number">2.3.</span> <span class="nav-text">RDD（Resilient Distributed Datasets）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transformations和actions"><span class="nav-number">2.4.</span> <span class="nav-text">transformations和actions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key-value_RDD"><span class="nav-number">2.5.</span> <span class="nav-text">key-value RDD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包"><span class="nav-number">2.6.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享变量"><span class="nav-number">2.7.</span> <span class="nav-text">共享变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+  
+
+  
+
+
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
