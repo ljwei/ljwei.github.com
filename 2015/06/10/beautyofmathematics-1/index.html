@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="test," />
+  <meta name="keywords" content="math,nlp," />
 
 
 
@@ -45,7 +45,7 @@
 
 
 
-  <title> first blog // Jerry's BLOG </title>
+  <title> 数学之美一——语言模型 // Jerry's BLOG </title>
 </head>
 
 <body>
@@ -125,7 +125,7 @@
           
           
             
-              first blog
+              数学之美一——语言模型
             
           
         </h1>
@@ -133,9 +133,20 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-06-02
+          发表于 2015-06-10
         </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/math/">math</a>
+
+              
+              
+
+            
+          </span>
         
 
         
@@ -150,14 +161,66 @@
       
 
       
-        <p>终于搭好好blog了，好开心！</p>
-<a id="more"></a>
-<p>利用github pages和Hexo搭建好了本博客！</p>
-<p>有点小激动，特地测试一下。</p>
-<h3 id="latex">latex</h3><p>$$<br>\sum<br>$$</p>
-<p>Simple inline $a = b + c$</p>
-<p>This equation <span>$\cos 2\theta = \cos^2 \theta - \sin^2 \theta =  2 \cos^2 \theta - 1$</span><!-- Has MathJax --> is inline.</p>
-<h3 id="code">code</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> <span class="string">'hello, world!'</span></span><br></pre></td></tr></table></figure>
+        <p>在本书第一版刚出版不就，就听说过此书，囫囵吞枣地看过一边，那时还在读大学，虽然是软工专业，但是每学期都有很多的数学课，记得有：微积分、线性代数、概率论与数理统计、复变函数、离散数学、计算方法等等。当时学的时候只是为了应付考试，因此也是只想着怎样解题就行了，对更深层次的内容没有深究，加上本科阶段并没有什么具体的研究方向，因此也没觉得这些东西将来会有什么用。</p>
+<p>现在，正在读硕士，而且也进入了机器学习这个方向，才感觉数学的应用是如此之美，刚好了解到《数学之美》出了第二版，更新了关于最近火爆的机器学习和大数据的内容。于是决定再好好细读一番，领略一下数学在自然语言处理中的巧妙应用，并用博客记录下学习的过程。</p>
+<h2 id="文字与数字">文字与数字</h2><p>人类的发展经历了漫长的时间，才慢慢出现了语言和文字。</p>
+<p>最早出现的是象形文字，这可以理解，这是一种抽象程度非常低的文字，用类似图形的方式来简单记录眼睛直观上看到的内容。后来慢慢出现拼音文字，这是一个飞跃，文字的抽象程度变高了很多，不再是简单的记录，而是有了编码的概念。</p>
+<p>随着文明的发展，文字慢慢显得不够用了，在开始阶段，是增加文字的数量，但增加到了一定量后，人类很难记住这么多的文字了，于是慢慢出现了一词多义的现象。</p>
+<p>一词多义也正是自然语言处理复杂的原因，需要根据上下文背景来判断文字的意思，这极大地增加了处理的复杂度，而且有些表述本身就有多种理解。</p>
+<p>和文字的出现是因为信息太多必须记录下来一样，数字的出现也是因为，财产多到需要数一数才能搞清楚。刚开始用手指数，可以从1数到10，但是财产进一步变多后，需要一种更有效的编码方式了，于是出现了进位制，然后慢慢演化出了计数系统。</p>
+<p>数字演化的轨迹也是各不相同，中国是采用个十百千万为单位，古罗马采用IVXLCDM等字母，但是中国的数字明显比古罗马要高明许多，因为中国是采用乘法规则编码，而古罗马是加减法规则。现在在全世界都通用的是阿拉伯数字，之所以能流行起来，也是因为其高度的抽象，写起来非常简单。</p>
+<h2 id="基于规则的自然语言处理">基于规则的自然语言处理</h2><p>随着计算机的出现，有人就提出了一个问题，计算机能否懂自然语言呢？</p>
+<p>为了解答这个问题，无数人为之努力，主要可以分成两个阶段：</p>
+<ul>
+<li>基于规则的模型，后来被证明不可行。</li>
+<li>基于统计的模型，现在应用十分普遍。</li>
+</ul>
+<p>基于规则的模型的思路主要是，要想让计算机按照人学习语言的方式来理解自然语言，这是非常直观的思路，因此那个时候的科学家认为，可以将自然语言处理分为两个部分：句法分析和语义分析。</p>
+<p>具体说来就是，先分析一个句子中每个部分的词性，然后根据文法规则得到文法分析树，进而分析整个句子的语意。</p>
+<p>乍一看好像是编译原理中的内容，的确如此，因为不管是自然语言还是编程语言，其本质都是相同的，都是信息编码而已，只不过自然语言用于人与人之间的交流，而编程语言用于人与计算机。那么，为什么编译器技术能成功用于编程语言，而无法用于自然语言处理呢？</p>
+<p>其根本原因在于，编程语言是上下文无关文法，而自然语言是上下文有关文法，用算法复杂度来衡量的话，那么上下文无关文法是<span>$O(n^2)$</span><!-- Has MathJax -->，而上下文有关文法是<span>$O(n^6)$</span><!-- Has MathJax -->，这里的n代表语句长度。简单说来就是，编程语言要比自然语言复杂得多，难怪我英语学了那么多年也没学好，果然只是因为自然语言比编程语言负责，哈哈。</p>
+<p>书中给了一个例子：<br>The pen is in the box.<br>The box is in the pen.</p>
+<p>这就需要根据人的常识来判断，第二句中的pen是围栏的意思，而这对于计算机来说，是很难做到的。</p>
+<h2 id="统计语言模型">统计语言模型</h2><p>1970年之后，统计语言模型的出现使得自然语言处理有看到了希望，经过几十年的发展，现在已经是所有自然语言处理的基础，广泛应用于语音识别、手写体识别、机器翻译、拼写纠错等等。</p>
+<p>统计语言模型不在关注一个句子的语法是否合理，而是使用这个句子出现的可能性也就是概率来衡量，假设句子S可用单词序列<span>$w_1, w_2, ..., w_n$</span><!-- Has MathJax -->来表示，那么利用条件概率公式，可知：</p>
+<span>$$P(S) = P(w_1, w_2, ..., w_n)
+= P(w_1)P(w_2|w_1)P(w_3|w_1, w_2)\dots P(w_n|w_1,w_2,w_3,...,w_{n-1})$$</span><!-- Has MathJax -->
+<p>但是计算这些条件概率是很麻烦的，特别是当变量变得很多时，马尔可夫提出了一种简化的思想，就是假设每个单词的出现只与前一个单词有关，于是上面的公式可以极大简化：</p>
+<span>$$P(S) = P(w_1, w_2, ..., w_n)
+= P(w_1)P(w_2|w_1)P(w_3|w_2)\dots P(w_n|w_{n-1})$$</span><!-- Has MathJax -->
+<p>这种模型称为二元模型。而这种只涉及到两个变量的条件概率的计算是很容易实现的。</p>
+<span>$$P(w_i|w_{i-1})= \frac{P(w_i, w_{i-1})}{P(w_{i-1})}= \frac{\#(w_i, w_{i-1})}{\#(w_{i-1})}$$</span><!-- Has MathJax -->
+<p>计算<span>$\#(w_i, w_{i-1})$</span><!-- Has MathJax -->只用统计语料库中<span>$w_i, w_{i-1})$</span><!-- Has MathJax -->同时出现的频率就可以了，而计算<span>$\#(w_{i-1})$</span><!-- Has MathJax -->则只用统计<span>$w_{i-1})$</span><!-- Has MathJax -->单独出现的频率。</p>
+<h2 id="统计语言模型的工程诀窍">统计语言模型的工程诀窍</h2><h3 id="高阶语言模型">高阶语言模型</h3><p>前面使用的二元模型，对条件概率的简化使得计算起来十分方便，因为只考虑了前一个单词对当前单词出现概率的影响，但是现实的情况告诉我们，这种简化似乎有点过于简单了，更普遍的假设是某个词与前面N-1个词有关。</p>
+<span>$$P(w_i|w_1, w_2, ..., w_{i-1}) = P(w_i|w_{i-N+1}, w_{i-N+2}, w_{i-1})$$</span><!-- Has MathJax -->
+<p>这种假设成为N-1阶马尔可夫假设，对应的模型称为N元模型。这其实是二元模型的推广，当N＝2时，上述模型就是二元模型，而N＝1时，这个模型就退化为上下文无关的模型了。在实际应用中，使用最多的是N＝3的三元模型，更高阶的模型由于计算复杂度随N指数级增长，导致计算太负责，而且效果提升已经不是很明显，因此很少使用了。</p>
+<h3 id="模型的训练">模型的训练</h3><p>公式中的所有的条件概率成为模型的参数，而模型的训练就是对这些参数进行合理的估计，常用的参数估计的方法有很多：</p>
+<p><strong>极大似然估计</strong></p>
+<p>这是一种最直观的统计法，其推导的结果就是用频率来估计。但是这种估计有一个明显的缺点，就是零概率问题，即如果一个词组出现的次数为0，那么是否应该认定其对应的条件概率也为零，这明显是不对的，因为根据大数定理，只有当数据量很大时，才能用频率去估计，因此直接的办法就是增大数据量。</p>
+<p>但是，即使增大数据量，零概率问题仍然会出现，特别是模型的复杂度很高时，例如三元模型，相对与这种复杂模型来说，很难满足足够的数据量。因此，提出了很多更好的估计法，例如最大后验估计（MAP）、贝叶斯估计，但是在自然语言处理中，使用的最多的是古德-图灵估计。</p>
+<p><strong>古德-图灵估计</strong><br>假设语料库中出现r次的词有<span>$N_r$</span><!-- Has MathJax -->个，那么</p>
+<span>$$N = \sum_{r=1}^{\infty}{rN_r}$$</span><!-- Has MathJax -->
+<p>现在对r进行一些平滑处理，使用<span>$d_r$</span><!-- Has MathJax -->来代替r：</p>
+<span>$$d_r = \frac{(r+1)N_{r+1}}{N_r} \\
+
+\sum_r{d_rN_r} = N$$</span><!-- Has MathJax -->
+<p>之前在另一篇博客中提到过Zipf定律，即单词的数量的出现的次数存在指数关系。因此在一般情况下，<span>$d_r<r$< span=""><!-- Has MathJax -->，多出来的那部分概率分给了<span>$d_0$</span><!-- Has MathJax -->。</r$<></span></p>
+<p><strong>卡茨退避法</strong><br>卡茨认为，并非需要对所有的r都打折扣，而是设定一个阈值T，对超过阈值的r，认为是可靠的，不用打折扣，只对小于阈值的r打折扣，建议的T的取值为8-10。对与二元模型，公式如下：</p>
+<span>$$P(w_i|w_{i-1}) =
+\begin{cases}
+f(w_i|w_{i-1})       & \#(w_{i-1}, w_i)\ge T \\
+f_{gt}(w_i|w_{i-1})   & 0 < \#(w_{i-1}, w_i) < T \\
+Q(w_{i-1})f(w_i)           & \#(w_{i-1}, w_i) = 0
+\end{cases}$$</span><!-- Has MathJax -->
+<p>其中，<span>$f_{gt}()$</span><!-- Has MathJax -->表示使用古德-图灵估计，而</p>
+<span>$$Q(w_{i-1}) = \frac{1-\sum_{w_i seen}{P(w_i|w_{i-1})}}{\sum_{w_i unseen}{f(w_i)}}$$</span><!-- Has MathJax -->
+<p>还有一些其他的平滑方法，比如:加1平滑，Witten-Bell打折法，留存估计，删除估计，Add-delta等。</p>
+<h3 id="语料的选取问题">语料的选取问题</h3><p>在收集训练数据时，需要注意以下三个问题：</p>
+<ul>
+<li>训练数据应与应用的场景匹配</li>
+<li>数据一般是越多越好，但是也要与模型的复杂度一致，一味增加数据没有意义</li>
+<li>对与数据噪音的处理办法是：对于能找到模式的、量比较大的，需要过滤，而对于随机的、少量的可以忽略。</li>
+</ul>
 
       
     </div>
@@ -166,7 +229,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/test/"> #test </a>
+            <a href="/tags/math/"> #math </a>
+          
+            <a href="/tags/nlp/"> #nlp </a>
           
         </div>
       
@@ -175,11 +240,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/06/03/Mooc-statlearning-LinReg/">统计学习三——线性回归</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/09/Mooc-MMDS-2-MapReduce/">海量数据挖掘学习笔记一——MapReduce</a>
             
           </div>
         </div>
@@ -277,7 +342,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#latex"><span class="nav-number">1.</span> <span class="nav-text">latex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#code"><span class="nav-number">2.</span> <span class="nav-text">code</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文字与数字"><span class="nav-number">1.</span> <span class="nav-text">文字与数字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于规则的自然语言处理"><span class="nav-number">2.</span> <span class="nav-text">基于规则的自然语言处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#统计语言模型"><span class="nav-number">3.</span> <span class="nav-text">统计语言模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#统计语言模型的工程诀窍"><span class="nav-number">4.</span> <span class="nav-text">统计语言模型的工程诀窍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高阶语言模型"><span class="nav-number">4.1.</span> <span class="nav-text">高阶语言模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的训练"><span class="nav-number">4.2.</span> <span class="nav-text">模型的训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语料的选取问题"><span class="nav-number">4.3.</span> <span class="nav-text">语料的选取问题</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
