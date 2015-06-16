@@ -1,0 +1,620 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="math,search engine," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> 数学之美二——搜索引擎 // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              数学之美二——搜索引擎
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-13
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/math/">math</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>吴军博士在文章开头就提到，技术分为<strong>术</strong>和<strong>道</strong>两种，<strong>具体的做事方法是术，做事的原理和原则是道</strong>。很多具体的技术很快会从独门绝技到普及，再到落伍，追求术的人一辈子工作很幸苦，只有掌握了技术的本质和精髓才能永远游刃有余。而我们在学习的过程中往往趋向与求术，而忽视了道。</p>
+<p>搜索引擎主要包含一下三个基本服务：</p>
+<ul>
+<li><strong>下载</strong>：自动下载尽可能多的网页</li>
+<li><strong>索引</strong>：建立快速有效的索引</li>
+<li><strong>排序</strong>：根据相关性对网页进行公平准确的排序</li>
+</ul>
+<p>能抽象出这三种基本服务，这就是搜索的道。下面也是从这三个方面来分别介绍搜索引擎的细节，以及背后的数学应用。</p>
+<h2 id="索引">索引</h2><h3 id="布尔代数">布尔代数</h3><p>布尔代数十分简单，然而布尔代数的表达能力很强，计算机本身就是由很多简单的电路组成，而数字电路背后的逻辑就是布尔代数。在生活中，我妈经常跟我感叹，电脑真是神奇，不知道是谁这么聪明发明了电脑这个东西，在他们的印象中，现在的计算机简直无所不能，而且神秘莫测，然而他们不知道其实电脑只认识0和1，只不过计算机比我们勤劳（CPU一直不停地计算），比我们记忆力好（各式各样的存储设备，保存了大量的信息）而已。</p>
+<p>布尔代数对于数学的意义等同于量子力学对物理学的意义，它们将我们对世界的认识从连续状态扩展到离散状态。</p>
+<h3 id="索引-1">索引</h3><p>索引是搜索引擎的关键所在，高效的索引保证了搜索引擎能在很短的时间内给出搜索结果，正是这种即时性，才是搜索引擎被广泛使用的原因。</p>
+<p>然而面对大量的资料，如何才能很快找到想要的东西呢？其实索引在生活中随处可见，比如在图书馆，图书馆里的资料也不计其数，如果你想借一本书，一本一本找是不可能的，图书馆利用的是索书号（这就是一种索引），根据书名查询后得到索书号，这个索书号会告诉你关于书的位置的准确信息。不光是图书馆，其实现在每本书后面都会有一个索引表，里面记录了书中的关键词对应的页码，这就是索引，其原理都差不多。</p>
+<p>在搜索引擎中，最简单的索引结构是用一个很长的二进制数表示关键字是否出现在每个网页中。因此有多少个网页，这个二进制数就有多少位，这样的好处是，要进行复杂的查询时，只用将对应的二进制数进行布尔运算就可以了，而计算机做布尔运算的速度非常之快。</p>
+<p>然而，互联网中的网页数量是巨大的，因此索引也就很大，在万亿字节这个量级，需要分布式集群才能存下。而分布式环境也便于同时并行处理用户请求，可以提高查询效率，最后由主服务器将合并后的结果返回给用户。</p>
+<h2 id="下载">下载</h2><p>前面提到了，下载指的是自动下载尽可能多的网页，这就需要离散数学中图论的相关知识了。</p>
+<h3 id="图论">图论</h3><p>图论始于<em>哥尼斯堡七桥问题</em>，就是将下图中的每座桥都恰好走一遍并回到原点。<br><img src="http://7xjgct.com1.z0.glb.clouddn.com/beautyofmathematics/2/1.jpg" alt="pic"></p>
+<p>欧拉证明了这个问题，并给出了一个定理：</p>
+<blockquote>
+<p><em>如果一个图能够从一个顶点出发，每条边不重复地遍历一遍回到这个顶点，那么每个顶点的度必为偶数。</em></p>
+</blockquote>
+<h3 id="网络爬虫">网络爬虫</h3><p>将网页和网页间的超链接抽象成图，那么要想自动下载所有的网页，就必须有一个好的遍历的算法，常用的图的遍历算法有：BFS和DFS。选择不同的算法，代表了不同的策略，其效果也是各不相同。</p>
+<p>由于一般网站最重要的是首页，因此使用BFS，可以在更短的时间内，爬到更多重要的内容。但是爬一个网站需要与其建立连接，这个过程是需要时间的，如果建立连接的次数太多，那么下载的效率就降低了，这么看来DFS又更加合理了。</p>
+<p>总结来说，网页爬虫不是简单的选择BFS或DFS，而是有一个相对复杂的下载优先级排序的方法。</p>
+<p>在网络爬虫中，还需要记录所有已经爬过的网页，避免重复或者漏掉，常用的办法是哈希表（也是一种索引），可以在常数时间内进行查询。一般这张散列表会很大，需要多台机器存储，因此需要同步状态，但是表的访问是很频繁的，因此服务器之间的通信就成了整个爬虫系统的瓶颈。</p>
+<p>常见的解决办法一般都采用了这样两个技术，来减少通信的次数：</p>
+<ul>
+<li>首先，明确每台下载服务器的分工，也就是说在调度时一看到某个URL就知道要交给哪台服务器去下载，以免很多服务器都要重复判断某个URL是否需要下载。</li>
+<li>然后，在明确分工的基础上，判断URL是否下载就可以批处理了。</li>
+</ul>
+<h2 id="排序">排序</h2><p>查询结果一般都包含大量的结果，对这些结果的排序决定了搜索引擎的质量。对于一个查询，其搜索结果的排名取决于两组信息：<strong>关于网页的质量信息</strong>，以及<strong>这个查询与每个网页的相关性信息</strong>。</p>
+<h3 id="PageRank原理">PageRank原理</h3><p>PageRank就是用来解决如何准确度量网页的质量的问题的。其思路就是进行投票。举个简单的额例子就是，比如要给某人打分，那肯定要先找到认知这个人的所有人，让他们对其进行评分，但是这些人中有些是比较有权威的（自身的分数就很高），他说的话大家更加信服，因此他的评分的权重会高一些。</p>
+<p>这种思路用到网页上，把人换成网页，把‘认识’这种关系换成有一条连接指向它，就行了。具体计算方法如下：</p>
+<p>一个页面的“得票数”由所有链向它的页面的重要性来决定，到一个页面的超链接相当于对该页投一票。一个页面的PageRank是由所有链向它的页面（“链入页面”）的重要性经过递归算法得到的。一个有较多链入的页面会有较高的等级，相反如果一个页面没有任何链入页面，那么它没有等级。</p>
+<p>假设一个由4个页面组成的小团体：A，B，C和D。如果所有页面都链向A，那么A的PR（PageRank）值将是B，C及D的Pagerank总和。</p>
+<span>$$PR(A) = PR(B)+PR(C)+PR(D)$$</span><!-- Has MathJax -->
+<p>继续假设B也有链接到C，并且D也有链接到包括A的3个页面。一个页面不能投票2次。所以B给每个页面半票。以同样的逻辑，D投出的票只有三分之一算到了A的PageRank上。</p>
+<span>$$PR(A) = \frac{PR(B)}{2}+\frac{PR(C)}{1}+\frac{PR(D)}{3}$$</span><!-- Has MathJax -->
+<p>换句话说，根据链出总数平分一个页面的PR值。</p>
+<span>$$PR(A) = \frac{PR(B)}{L(B)}+\frac{PR(C)}{L(C)}+\frac{PR(D)}{L(D)}$$</span><!-- Has MathJax -->
+<p>最后，所有这些被换算为一个百分比再乘上一个系数。由于“没有向外链接的页面”传递出去的PageRank会是0，所以，Google通过数学系统给了每个页面一个最小值：</p>
+<span>$$PR(A) = (\frac{PR(B)}{L(B)}+\frac{PR(C)}{L(C)}+\frac{PR(D)}{L(D)})d+\frac{1-d}{N}$$</span><!-- Has MathJax -->
+<p>说明：在Sergey Brin和Lawrence Page的1998年原文中给每一个页面设定的最小值是1-d，而不是这里的<br>(1-d)/N。 所以一个页面的PageRank是由其他页面的PageRank计算得到。Google不断的重复计算每个页面的PageRank。如果给每个页面一个随机PageRank值（非0），那么经过不断的重复计算，这些页面的PR值会趋向于稳定，也就是收敛的状态。这就是搜索引擎使用它的原因。</p>
+<p>根据上面的计算过程，计算搜索结果的网页排名过程中需要用到网页本身的排名，这就变成了先有鸡还是先有蛋的问题了吗？好像机器学习中经常遇到这个问题，但是解决的办法也很简单，就是先随机给出初始值，只要算法是收敛的，总能得到最后的结果。</p>
+<h3 id="PageRank的计算方法">PageRank的计算方法</h3><p>如果将整个网络看成一张大图，那么网页就是图中的节点，而链接就是边，要表示这张图，最常见的办法就是邻接矩阵，假设有N个网页，那么：</p>
+<span>$$A = 
+\begin{bmatrix}
+ a_{11} & \cdots & a_{1n} & \cdots & a_{1N} \\
+ \cdots & \cdots & \cdots& \cdots & \cdots \\
+ a_{m1} & \cdots & a_{mn} & \cdots & a_{mN} \\
+ \cdots & \cdots & \cdots& \cdots & \cdots \\
+ a_{N1} & \cdots & a_{Nn} & \cdots & a_{NN} \\
+\end{bmatrix}$$</span><!-- Has MathJax -->
+<p>矩阵中的每一项<span>$a_{mn}$</span><!-- Has MathJax -->表示网页m指向网页n的链接数。</p>
+<p>用向量B来表示网页的排名：</p>
+<span>$$B = (b_1, b_2, \cdots, b_N)^T$$</span><!-- Has MathJax -->
+<p>A是已知的，而B是我们要求的，计算B采用的是迭代计算的方法，第i次迭代的结果，可用下式计算：</p>
+<span>$$B_i = A \cdot B_{i-1}$$</span><!-- Has MathJax -->
+<p>初始时，令</p>
+<span>$$B_0 = (\frac{1}{N}, \frac{1}{N}, \cdots, \frac{1}{N})^T$$</span><!-- Has MathJax -->
+<p>这样上面的过程就可以一直迭代下去，知道算法收敛后，就可以得到网页的排名了。一般来讲，只要10次左右的迭代基本上就收敛了。</p>
+<p>由于网页的数量是巨大的，而网页之间的链接就显得非常稀疏，因此计算时需要对零概率进行平滑处理。一般使用一个小的常数<span>$\alpha$</span><!-- Has MathJax -->，计算公式如下：</p>
+<span>$$B_i = [\frac{\alpha}{N}\cdot I + (1-\alpha )A ]\cdot B_{i-1}$$</span><!-- Has MathJax -->
+<p>上面所有的过程都是矩阵乘法，这样可以很容易进行并行化计算，比如可以利用MapReduce加速计算过程，具体过程可以参考另一篇文章<a href="http://jwli.ml/2015/06/09/Mooc-MMDS-2-MapReduce/" target="_blank" rel="external">Map Reduce实践</a>。</p>
+<p>实际上，还有很多其他的链接分析算法，比如<a href="https://en.wikipedia.org/wiki/HITS_algorithm" target="_blank" rel="external">Hits</a>、HillTop等。</p>
+<h3 id="TF-IDF">TF-IDF</h3><p>前面讲到的PageRank是用于度量文档的质量，而接下来要讲到的TF-IDF就是用来度量文档与查询关键词之间的相关性，而这两者就决定了搜索结果的质量。</p>
+<p>吴军老师提到，在几年之前，技术和算法的重要性要高于数据，而在今天，利用收集到的大量的用户点击数据，可以对搜索结果有很大的提高，他总结下来，现在影响搜索引擎质量的诸多因素中，除了用户的点击数据之外，都可以归纳为下面4大类：</p>
+<ul>
+<li>完备的索引。</li>
+<li>对网页质量的度量。取决于采用的链接分析算法，PageRank，Hits等。</li>
+<li>用户偏好。</li>
+<li>确定一个网页和某个查询的相关性的方法。</li>
+</ul>
+<p>关于TF-IDF的定义在<a href="http://jwli.ml/2015/06/05/Mooc-MMDS-1-basic-concepts/" target="_blank" rel="external">另一篇文章</a>中已经提到过了，不在赘述。</p>
+<p>将一个查询分解为N个关键词，那么一个查询与文档的相关性，就可以用如下的公式计算了：</p>
+<span>$$TF_1\cdot IDF_1 +TF_2\cdot IDF_2 +\cdots + TF_N\cdot IDF_N$$</span><!-- Has MathJax -->
+<p>TF-IDF有很强的理论根据，可以用信息论的观点进行解释，因此现在使用广泛。</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/math/"> #math </a>
+          
+            <a href="/tags/search-engine/"> #search engine </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/10/beautyofmathematics-1/">数学之美一——语言模型</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#布尔代数"><span class="nav-number">1.1.</span> <span class="nav-text">布尔代数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引-1"><span class="nav-number">1.2.</span> <span class="nav-text">索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载"><span class="nav-number">2.</span> <span class="nav-text">下载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#图论"><span class="nav-number">2.1.</span> <span class="nav-text">图论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络爬虫"><span class="nav-number">2.2.</span> <span class="nav-text">网络爬虫</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序"><span class="nav-number">3.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PageRank原理"><span class="nav-number">3.1.</span> <span class="nav-text">PageRank原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PageRank的计算方法"><span class="nav-number">3.2.</span> <span class="nav-text">PageRank的计算方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TF-IDF"><span class="nav-number">3.3.</span> <span class="nav-text">TF-IDF</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+  
+
+  
+
+
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
