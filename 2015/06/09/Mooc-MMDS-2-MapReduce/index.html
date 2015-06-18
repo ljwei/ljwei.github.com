@@ -200,12 +200,32 @@
 <p>以wordcount为例，整个流程如下：<br><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/mapreduce/hadoop-mapreduce.png" alt="pic"></p>
 <h2 id="Map_Reduce实践">Map Reduce实践</h2><p>根据Map Reduce的特点，其最重要的两个使用场景是：<strong>大矩阵乘法，关系代数运算</strong>。</p>
 <p>下面从这两个方面来介绍其具体实现。</p>
-<h3 id="矩阵乘法">矩阵乘法</h3><h4 id="矩阵-向量乘法">矩阵-向量乘法</h4><!-- 一个$m\times n$的矩阵M和n维向量V相乘，得到的m维的向量X，X的第i个元素可表示为：
-$$
-x_i=\sum_{j=1}^m{m_{ij}v_j}
-$$
--->
-<h4 id="矩阵-矩阵乘法">矩阵-矩阵乘法</h4><h3 id="关系代数运算">关系代数运算</h3><h4 id="选择">选择</h4><h4 id="投影">投影</h4><h4 id="并、交、差">并、交、差</h4><h4 id="自然连接">自然连接</h4><h4 id="一般连接">一般连接</h4><h4 id="分组、聚合">分组、聚合</h4>
+<h3 id="矩阵乘法">矩阵乘法</h3><h4 id="矩阵-向量乘法">矩阵-向量乘法</h4><p>一个$m\times n$的矩阵M和n维向量V相乘，得到的m维的向量X，X的第i个元素可表示为：</p>
+<span>$$x_i=\sum_{j=1}^m{m_{ij}v_j}$$</span><!-- Has MathJax -->
+<p>如果矩阵M很大，可将M矩阵中的数据按行为单位存储到多台机器中。<br><strong>Map阶段</strong>：以行号为键，该行的内容为值。<br><strong>Reduce阶段</strong>：计算键相同的两个向量的内积。</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/mapreduce/1.png" alt=""></p>
+<h3 id="关系代数运算">关系代数运算</h3><h4 id="选择">选择</h4><p>选择运算的关系代数表达式为：<span>$\sigma_C(R)$</span><!-- Has MathJax --></p>
+<p><strong>Map阶段</strong>：对R中的每个元组t，检测它是否满足C。如果满足，则产生一个键值对（t， t）。<br><strong>Reduce阶段</strong>：将收到的键值对直接输出。</p>
+<h4 id="投影">投影</h4><p>选择运算的关系代数表达式为：<span>$\pi_S(R)$</span><!-- Has MathJax --></p>
+<p><strong>Map阶段</strong>：对R中的每个元组t，通过剔除t中属性不在S中的字段得到元组t’，输出键值对(t’, t’)<br><strong>Reduce阶段</strong>：由于Map产生的键，可能对应多个值。因此，Reduce将<span>$（t', [t', t', t', \cdots , t'])$</span><!-- Has MathJax -->转换成（t’, t’)。</p>
+<h4 id="并、交、差">并、交、差</h4><p>并运算：<br><strong>Map阶段</strong>：将每个输入元组变成（t， t）<br><strong>Reduce阶段</strong>：和每个键t关联的可能有一个或两个值，两种情况都输出（t， t）</p>
+<p>交运算：<br><strong>Map阶段</strong>：将每个输入元组变成（t， t）<br><strong>Reduce阶段</strong>：如果键t的值表为[t, t]，则输出（t， t），否则输出（t， null）</p>
+<p>差运算：<br><strong>Map阶段</strong>：对R中的元组t，产生键值对（t，R）。对S中的元组t，产生键值对（t，S）。这里的R和S只是用来标记键值对是从哪个表来的，只是符号而已。<br><strong>Reduce阶段</strong>：对于每个键t，如果值表是[R]，则输出（t, t)，如果值表是其他，包括[R,S],[S,R],[S]等，都输出（t，null）。</p>
+<h4 id="Join的实现原理">Join的实现原理</h4><p>select u.name, o.orderid from order o join user u on o.uid = u.uid;<br>在map的输出value中为不同表的数据打上tag标记，在reduce阶段根据tag判断数据来源。MapReduce的过程如下（这里只是说明最基本的Join的实现，还有其他的实现方式）</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/mapreduce/join.png" alt="MapReduce CommonJoin的实现"></p>
+<h4 id="Group_By的实现原理">Group By的实现原理</h4><p>select rank, isonline, count(*) from city group by rank, isonline;<br>将GroupBy的字段组合为map的输出key值，利用MapReduce的排序，在reduce阶段保存LastKey区分不同的key。MapReduce的过程如下（当然这里只是说明Reduce端的非Hash聚合过程）</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/mapreduce/groupby.png" alt="MapReduce Group By的实现"> </p>
+<h4 id="Distinct的实现原理">Distinct的实现原理</h4><p>select dealid, count(distinct uid) num from order group by dealid;<br>当只有一个distinct字段时，如果不考虑Map阶段的Hash GroupBy，只需要将GroupBy字段和Distinct字段组合为map输出key，利用mapreduce的排序，同时将GroupBy字段作为reduce的key，在reduce阶段保存LastKey即可完成去重</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/mapreduce/1distinct.png" alt="MapReduce Distinct的实现"></p>
+<p>如果有多个distinct字段呢，如下面的SQL</p>
+<p>select dealid, count(distinct uid), count(distinct date) from order group by dealid;<br>实现方式有两种：</p>
+<p>（1）如果仍然按照上面一个distinct字段的方法，即下图这种实现方式，无法跟据uid和date分别排序，也就无法通过LastKey去重，仍然需要在reduce阶段在内存中通过Hash去重</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/mapreduce/2distinct-a.png" alt="MapReduce Multi Distinct的实现"></p>
+<p>（2）第二种实现方式，可以对所有的distinct字段编号，每行数据生成n行数据，那么相同字段就会分别排序，这时只需要在reduce阶段记录LastKey即可去重。</p>
+<p>这种实现方式很好的利用了MapReduce的排序，节省了reduce阶段去重的内存消耗，但是缺点是增加了shuffle的数据量。</p>
+<p>需要注意的是，在生成reduce value时，除第一个distinct字段所在行需要保留value值，其余distinct数据行value字段均可为空。</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/mapreduce/2distinct-b.png" alt="MapReduce Multi Distinct的实现"></p>
+
       
     </div>
 
@@ -330,7 +350,7 @@ $$
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The_Apache_Hadoop_Stack"><span class="nav-number">1.</span> <span class="nav-text">The Apache Hadoop Stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HDFS"><span class="nav-number">1.1.</span> <span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Map_Reduce"><span class="nav-number">1.2.</span> <span class="nav-text">Map Reduce</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map_Reduce实践"><span class="nav-number">2.</span> <span class="nav-text">Map Reduce实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#矩阵乘法"><span class="nav-number">2.1.</span> <span class="nav-text">矩阵乘法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#矩阵-向量乘法"><span class="nav-number">2.1.1.</span> <span class="nav-text">矩阵-向量乘法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#矩阵-矩阵乘法"><span class="nav-number">2.1.2.</span> <span class="nav-text">矩阵-矩阵乘法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关系代数运算"><span class="nav-number">2.2.</span> <span class="nav-text">关系代数运算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#选择"><span class="nav-number">2.2.1.</span> <span class="nav-text">选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#投影"><span class="nav-number">2.2.2.</span> <span class="nav-text">投影</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并、交、差"><span class="nav-number">2.2.3.</span> <span class="nav-text">并、交、差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自然连接"><span class="nav-number">2.2.4.</span> <span class="nav-text">自然连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一般连接"><span class="nav-number">2.2.5.</span> <span class="nav-text">一般连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分组、聚合"><span class="nav-number">2.2.6.</span> <span class="nav-text">分组、聚合</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The_Apache_Hadoop_Stack"><span class="nav-number">1.</span> <span class="nav-text">The Apache Hadoop Stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HDFS"><span class="nav-number">1.1.</span> <span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Map_Reduce"><span class="nav-number">1.2.</span> <span class="nav-text">Map Reduce</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map_Reduce实践"><span class="nav-number">2.</span> <span class="nav-text">Map Reduce实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#矩阵乘法"><span class="nav-number">2.1.</span> <span class="nav-text">矩阵乘法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#矩阵-向量乘法"><span class="nav-number">2.1.1.</span> <span class="nav-text">矩阵-向量乘法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关系代数运算"><span class="nav-number">2.2.</span> <span class="nav-text">关系代数运算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#选择"><span class="nav-number">2.2.1.</span> <span class="nav-text">选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#投影"><span class="nav-number">2.2.2.</span> <span class="nav-text">投影</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并、交、差"><span class="nav-number">2.2.3.</span> <span class="nav-text">并、交、差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Join的实现原理"><span class="nav-number">2.2.4.</span> <span class="nav-text">Join的实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Group_By的实现原理"><span class="nav-number">2.2.5.</span> <span class="nav-text">Group By的实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Distinct的实现原理"><span class="nav-number">2.2.6.</span> <span class="nav-text">Distinct的实现原理</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -558,5 +578,35 @@ $$
   
   
 
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 </body>
 </html>
