@@ -178,7 +178,7 @@
 <li><strong>特征权重计算</strong></li>
 </ul>
 <h3 id="表示模型">表示模型</h3><p>要将文本映射到特征空间，首先得确定要使用怎样的模型来表示文本的特征。常见的特征表示方式有：向量空间模型、概率分布模型等，但是最常用的是向量空间模型。</p>
-<p><strong>向量空间模型（ Vector Space Model，VSM）</strong>：向量空间模型就是用一个向量来表示一篇文档。由于文档有意义的基本单位是单词，因此在使用向量表示时，如果以词为单位，这就是现在最流行的<strong>词袋模型（BoW，Bag of Words）</strong>。现在词袋模型应用广泛，而且推广到了图像分类中，对应的模型叫做<strong>视觉词袋模型（BoVW，Bag of Visual Words）</strong>。</p>
+<p><strong>向量空间模型（ Vector Space Model，VSM）</strong>：向量空间模型就是用一个向量来表示一篇文档。由于文档有意义的基本单位是单词，因此在使用向量表示时，一般以词为单位，如果假设这些词之间没有关联，这就是现在最流行的<strong>词袋模型（BoW，Bag of Words）</strong>。现在词袋模型应用广泛，而且推广到了图像分类中，对应的模型叫做<strong>视觉词袋模型（BoVW，Bag of Visual Words）</strong>。</p>
 <p>词袋模型基于这样一个关键假设，即文章中<strong>词条出现的顺序是无关紧要的</strong>，它们对于文本的类别所起的作用是相互独立的，因此可以把文本看作一系列无序词条的集合。在该模型中，文本空间被视为一组正交词条（即词典）向量所张成的向量空间。由于一般数据集中，词典的规模很大，而向量的维数跟词典的大小相同，因而向量的维数往往是惊人的，导致计算量很大，而且词典中包含所有的单词，里面会包含很多噪声，而且特征不明显。</p>
 <p>正是由于上面提到的种种问题，需要对这个特征空间进行降维，而这个过程就是下面将提到的特征选择。</p>
 <p><strong>概率分布模型</strong>：词袋模型在需要深层分析的场合就会显得太过简化了。例如在语义分析里，“你打了我”和“我打了你”，意思是相反的，但用词袋模型表示后，这两句话是向量表示的等价的，这显然是不合理的。因此提出了n元模型，关于n元统计模型的内容在<a href="http://jwli.ml/2015/06/10/beautyofmathematics-1/" target="_blank" rel="external">另一篇文章</a>中有介绍。</p>
@@ -272,6 +272,8 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2015/07/08/recommendation-system-1-introduction/">推荐系统实践一——好的推荐系统</a>
+            
           </div>
 
           <div class="post-nav-next post-nav-item">
@@ -340,21 +342,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
