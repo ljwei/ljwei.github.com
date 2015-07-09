@@ -1,0 +1,665 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="CF,ItemCF,LFM,UserCF," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> 推荐系统二——协同过滤 // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              推荐系统二——协同过滤
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-07-08
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/recommendataion-system/">recommendataion system</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/07/08/recommendation-system-2-CF/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/08/recommendation-system-2-CF/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h2 id="定义">定义</h2><p>基于用户行为分析的推荐算法是个性化推荐的重要算法，学术界一般将这种类型的算法称为协同过滤算法。顾名思义，协同过滤就是指用户可以齐心协力，通过不断地和网站互动，使自己的推荐列表能够不断过滤掉自己不感兴趣的物品，从而越来越满足自己的需求。</p>
+<h2 id="分类">分类</h2><p>协同过滤算法按照使用的模型可以分为：</p>
+<ul>
+<li>最近邻模型：</li>
+<li>隐语义模型：</li>
+<li>图模型</li>
+</ul>
+<p>在这些方法中，最著名的、在业界得到最广泛应用的是最近邻模型，最近邻模型又可细分为基于用户的协同过滤和基于物品的协同过滤。</p>
+<h2 id="最近邻模型">最近邻模型</h2><h3 id="基于用户的（User-based）的协同过滤">基于用户的（User-based）的协同过滤</h3><p>基于用户的协同过滤算法是推荐系统中最古老的算法。用相似统计的方法得到具有相似爱好或者兴趣的相邻使用者，所以称之为以使用者为基础（User-based）的协同过滤。 </p>
+<p>方法步骤：</p>
+<ol>
+<li>收集使用者资讯<br>收集可以代表使用者兴趣的资讯。一般的网站系统使用评分的方式或是给予评价，这种方式被称为“主动评分”。另外一种是“被动评分”，是根据使用者的行为模式由系统代替使用者完成评价，不需要使用者直接打分或输入评价资料。电子商务网站在被动评分的资料获取上有其优势，使用者购买的商品记录是相当有用的资料。</li>
+<li>最近邻搜索(Nearest neighbor search, NNS)<br>以使用者为基础（User-based）的协同过滤的出发点是与使用者兴趣爱好相同的另一组使用者，就是计算两个使用者的相似度。例如：寻找n个和A有相似兴趣使用者，把他们对M的评分作为A对M的评分预测。一般会根据资料的不同选择不同的算法，目前较多使用的相似度算法有Pearson Correlation Coefficient、Cosine-based Similarity、Adjusted Cosine Similarity。</li>
+<li>产生推荐结果<br>有了最近邻集合，就可以对目标使用者的兴趣进行预测，产生推荐结果。依据推荐目的的不同进行不同形式的推荐，较常见的推荐结果有Top-N 推荐和关联推荐。Top-N 推荐是针对个体使用者产生，对每个人产生不一样的结果，例如：透过对A使用者的最近邻使用者进行统计，选择出现频率高且在A使用者的评分项目中不存在的，作为推荐结果。关联推荐是对最近邻使用者的记录进行关联规则(association rules)挖掘。</li>
+</ol>
+<h3 id="基于物品（Item-based）的协同过滤">基于物品（Item-based）的协同过滤</h3><p>以使用者为基础的协同推荐算法随着使用者数量的增多，计算的时间就会变长，所以在2001年Sarwar提出了基于项目的协同过滤推荐算法(Item-based Collaborative Filtering Algorithms)。以项目为基础的协同过滤方法有一个基本的假设”能够引起使用者兴趣的项目，必定与其之前评分高的项目相似”，透过计算项目之间的相似性来代替使用者之间的相似性。基于物品的协同过滤算法是目前业界应用最多的算法，包括：Amazon、Netflix、Hulu、YouTube。</p>
+<p>方法步骤：</p>
+<ol>
+<li>收集使用者资讯<br>同以使用者为基础（User-based）的协同过滤。</li>
+<li>针对项目的最近邻搜索<br>先计算已评价项目和待预测项目的相似度，并以相似度作为权重，加权各已评价项目的分数，得到待预测项目的预测值。例如：要对项目 A 和项目 B 进行相似性计算，要先找出同时对 A 和 B 打过分的组合，对这些组合进行相似度计算，常用的算法同以使用者为基础（User-based）的协同过滤。</li>
+<li>产生推荐结果<br>以项目为基础的协同过滤不用考虑使用者间的差别，所以精度比较差。但是却不需要使用者的历史资料，或是进行使用者识别。对于项目来讲，它们之间的相似性要稳定很多，因此可以离线完成工作量最大的相似性计算步骤，从而降低了线上计算量，提高推荐效率，尤其是在使用者多于项目的情形下尤为显著。</li>
+</ol>
+<h3 id="比较">比较</h3><p>根据UserCF和ItemCF的特点可以看出，UserCF的推荐结果着重于反映和用户兴趣相似的小群体的热点，而ItemCF的推荐结果着重于维系用户的历史兴趣。换句话说，UserCF的推荐更社会化，而ItemCF的推荐更个性化。</p>
+<p>正是由于它们的这些特点，使得它们有自己更适合的应用场景。对UserCF来说，更适合新闻网站中，人们看新闻更加看重新闻的热门程度，而不是个性化，而且从技术上来说，新闻的内容太多，加上不断更新，对新闻进行建模需要维护一张很大的表，在技术上也很难实现。</p>
+<p>而ItemCF则更使用与电子商务网站或视频音乐网站等更加注重个性化的应用场景。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指标</th>
+<th style="text-align:left">UserCF</th>
+<th style="text-align:left">ItemCF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">性能</td>
+<td style="text-align:left">适用于用户较少的场合</td>
+<td style="text-align:left">适用于物品数明显小于用户数的场合</td>
+</tr>
+<tr>
+<td style="text-align:left">领域</td>
+<td style="text-align:left">时效性较强，个性化兴趣不太明显的领域</td>
+<td style="text-align:left">长尾物品丰富，个性化需求强烈的领域</td>
+</tr>
+<tr>
+<td style="text-align:left">实时性</td>
+<td style="text-align:left">用户有新行为，不一定造成推荐结果的立即变化</td>
+<td style="text-align:left">用户有新行为一定会导致推荐结果的变化</td>
+</tr>
+<tr>
+<td style="text-align:left">冷启动</td>
+<td style="text-align:left">在新用户对很少的物品产生行为后，不能立即进行推荐，因为用户相似表是每隔一段时间离线计算的；新物品上线后，一旦有用户对物品产生行为，就可以将新物品推荐给其他相似用户</td>
+<td style="text-align:left">新用户只要对一个物品产生行为，就可以给他推荐和该物品相关的其他物品；有新物品时，需要更新物品相似表才能进行推荐</td>
+</tr>
+<tr>
+<td style="text-align:left">推荐理由</td>
+<td style="text-align:left">很难提供令用户信服的推荐解释</td>
+<td style="text-align:left">利用用户的历史行为给用户做推荐解释，可以令用户比较信服</td>
+</tr>
+</tbody>
+</table>
+<h2 id="隐语义模型（LFM，latent_factor_model)">隐语义模型（LFM，latent factor model)</h2><h3 id="简介">简介</h3><p>LFM最近很流行，该算法最早在文本挖掘领域被提出，用于找到文本的隐含语义。可以用到推荐系统中，用于挖掘物品的隐含语义，进而利用这些语义进行分类，从而有针对地进行推荐，提到推荐质量。</p>
+<p>其想法是利用矩阵分解的思想(就是常说的svd CF），挖掘出物体背后的隐含主题。</p>
+<p>这与现在在NLP中常用的主题模型的思想一致，不过在主题模型中，一般用LDA、pLSA模型。关于主题模型和语义分析，可以参考这篇文章：<a href="http://www.flickering.cn/ads/2015/02/%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E7%9A%84%E4%B8%80%E4%BA%9B%E6%96%B9%E6%B3%95%E4%B8%80/" target="_blank" rel="external">语义分析的一些方法</a>，对语义分析进行了深入的讲解。</p>
+<h3 id="公式推导">公式推导</h3><p>下面简单介绍一下基于矩阵分解的隐语义模型。</p>
+<p>LFM通过如下公式计算用户u对物品i的兴趣：</p>
+<span>$$\hat{r_{ui}} = p_u^Tq_i=\sum_{k=1}^K{p_{u,k}q_{i,k}}$$</span><!-- Has MathJax -->
+<p>其中<span>$p_{u,k}$</span><!-- Has MathJax -->表示用户u的兴趣和第k个隐类的关系，而<span>$q_{i,k}$</span><!-- Has MathJax -->度量了第k个隐类和物品i的关系。关键在于如何得到这两个参数，这就变成了一个最优化的问题。可以构造如下的损失函数：</p>
+<span>$$C=\sum{(r_{ui}-\hat{r_{ui}})^2}=\sum{(r_{ui}-\sum_{k=1}^K{p_{u,k}q_{i,k}})^2}+\lambda |p_u|_2^2+\lambda |q_i|_2^2$$</span><!-- Has MathJax -->
+<p>由最小二乘（least square method）延伸来的ALS（Alternating Least Squares）算法可以求解该问题，也就是采用迭代优化的方法，对上式求偏导：</p>
+<span>$$\frac{\partial{C}}{\partial{p_{uk}}}=-2q_{ik}e_{ui}+2\lambda p_{uk} \\
+\frac{\partial{C}}{\partial{q_{ik}}}=-2p_{uk}e_{ui}+2\lambda q_{ik} \\
+e_{ui}=r_{ui}-\sum_{k=1}^K{p_{u,k}q_{i,k}}$$</span><!-- Has MathJax -->
+<p>因此，可用下式来迭代更新<span>$p_{u,k}，q_{i,k}$</span><!-- Has MathJax -->，其中<span>$\alpha$</span><!-- Has MathJax -->是学习速率：</p>
+<span>$$p_{uk}=p_{uk}+\alpha (q_{ik}*e_{ui}-\lambda p_{uk}) \\
+q_{ik}=q_{ik}+\alpha (p_{uk}*e_{ui}-\lambda q_{ik})$$</span><!-- Has MathJax -->
+<h3 id="LFM和邻域模型比较">LFM和邻域模型比较</h3><h4 id="理论基础">理论基础</h4><p>LFM是优化算法，有学习的过程，而领域模型更像统计方法，没有明显的学习过程。</p>
+<h4 id="复杂度">复杂度</h4><p>LFM通过矩阵分解，实际上达到了降维的效果，所以不管是时间复杂度还是空间复杂度上，都会比邻域模型要好。</p>
+<h4 id="实时性">实时性</h4><p>LFM不能进行实时推荐。</p>
+<h4 id="推荐解释">推荐解释</h4><p>ItemCF可以提供很好的解释，但是LFM实际利用的是隐类和用户、物品之间的关系，因此很难将隐类表述清楚。</p>
+<h2 id="图模型">图模型</h2><p>将所有的用户行为看成是一系列的二元组，这样一个数据集就可以通过一个二分图表示出来。接下来就是度量两个顶点之间的额相关性，一般来说取决于以下三个因素：</p>
+<ul>
+<li>两个顶点之间的路径数</li>
+<li>两个顶点之间的路径的长度</li>
+<li>两个顶点之间的路径经过的顶点</li>
+</ul>
+<p>高相关性的顶点有如下特征：</p>
+<ul>
+<li>两个顶点间有很多路径</li>
+<li>连接两个顶点的路径长度比较短</li>
+<li>连接两个顶点的路径不会经过出度比较大的顶点</li>
+</ul>
+<p>根据这三个因素有很多计算相关性的方法。</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CF/"> #CF </a>
+          
+            <a href="/tags/ItemCF/"> #ItemCF </a>
+          
+            <a href="/tags/LFM/"> #LFM </a>
+          
+            <a href="/tags/UserCF/"> #UserCF </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/08/recommendation-system-1-introduction/">推荐系统一——好的推荐系统</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2015/07/08/recommendation-system-2-CF/"
+               data-title="推荐系统二——协同过滤" data-url="/2015/07/08/recommendation-system-2-CF/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类"><span class="nav-number">2.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最近邻模型"><span class="nav-number">3.</span> <span class="nav-text">最近邻模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于用户的（User-based）的协同过滤"><span class="nav-number">3.1.</span> <span class="nav-text">基于用户的（User-based）的协同过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于物品（Item-based）的协同过滤"><span class="nav-number">3.2.</span> <span class="nav-text">基于物品（Item-based）的协同过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#比较"><span class="nav-number">3.3.</span> <span class="nav-text">比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隐语义模型（LFM，latent_factor_model)"><span class="nav-number">4.</span> <span class="nav-text">隐语义模型（LFM，latent factor model)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">4.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#公式推导"><span class="nav-number">4.2.</span> <span class="nav-text">公式推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LFM和邻域模型比较"><span class="nav-number">4.3.</span> <span class="nav-text">LFM和邻域模型比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#理论基础"><span class="nav-number">4.3.1.</span> <span class="nav-text">理论基础</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复杂度"><span class="nav-number">4.3.2.</span> <span class="nav-text">复杂度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实时性"><span class="nav-number">4.3.3.</span> <span class="nav-text">实时性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推荐解释"><span class="nav-number">4.3.4.</span> <span class="nav-text">推荐解释</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图模型"><span class="nav-number">5.</span> <span class="nav-text">图模型</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jw-ml"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
