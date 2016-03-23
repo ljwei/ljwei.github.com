@@ -1,0 +1,601 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="CF,learning to rank," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> Listwise Collaboration Filtering // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Listwise Collaboration Filtering
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-11-05
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/recommender-system/">recommender system</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/11/05/recommender-system/listwise-cf-1/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/05/recommender-system/listwise-cf-1/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>本文简单介绍在IR领域的l2r理论和其在推荐系统中的应用.<br><a id="more"></a></p>
+<h2 id="learning_to_rank">learning to rank</h2><h2 id="formalization">formalization</h2><p>假设有：</p>
+<ul>
+<li>m个用户：$U={u_1, u_2, …, u_m}$</li>
+<li>n个物品：$I={i_1, i_2, …, i_n}$</li>
+<li>$m\times n$评分矩阵: $R={r_{u,i}}$</li>
+<li>对物品i评分过的用户集合：$U_i$</li>
+<li>用户u有过评分的物品的集合：$I_u$</li>
+</ul>
+<h2 id="评价指标">评价指标</h2><p>如何度量一个推荐系统的结果是一个很重要的问题，很多和推荐系统相关的讨论都是从评价指标展开的。采取怎样的评价指标取决于这个推荐系统的应用场景和推荐目标。总体来说，可以分为两类：评分预测和TopN推荐。</p>
+<p><strong>评分预测:</strong><br>    推荐系统根据用户的历史评分数据，来预测用户在将来看到一个他没有评分的物品时，会给这个物品评多少分。</p>
+<p><strong>TopN推荐:</strong><br>    推荐系统根据用户的历史评分数据，为用户生成一个个性化的推荐列表。</p>
+<p>从上面的描述可以看到，评分预测强调的是预测用户对物品的评价，而TopN推荐强调的是预测用户可能感兴趣的物品。评分预测是推荐系统中的传统问题，关于推荐系统的早期研究，例如GroupLens在MovieLens数据集上的电影评分预测，Netflix比赛等，都是属于评分预测。</p>
+<p>而近些年来，有研究表明，TopN推荐更接近用户对推荐系统的期望。因此越来越多的研究都是关于TopN推荐的。</p>
+<h3 id="基于评分的评价">基于评分的评价</h3><p>对于评分预测问题，一般采用的评价指标有均方根误差（RMSE）和平均绝对误差（MAE）。</p>
+<p><strong>Pearson Correlation Coefficient：</strong><br>    皮尔逊相关系数衡量的是一个用户的预测评分向量$\hat{R_u}$和真实评分向量$R_u$的线性相关程度。</p>
+<h3 id="基于排序的评价">基于排序的评价</h3><p>对于TopN推荐，评价指标有很多种，而且分类方法也多种多样。</p>
+<h4 id="pointwise">pointwise</h4><p>这类主要包括常见的例如：Recall，precision，f1</p>
+<h4 id="pairwise">pairwise</h4><p><strong>AUC：</strong><br>    表示ROC（receiver operator curve）曲线下的面积，它衡量一个推荐系统能够多大程度上将用户喜欢的物品和不喜欢的物品区分出来。由于直接计算AUC比较麻烦，常用的下面的方法来近似：每次随机从相关商品集中选择一个商品i，然后中不相关商品集中选择一个商品j，比较它们的评分大小，若i&gt;j，则加1。</p>
+<p><strong>spearman:</strong><br>    和Pearson的形式一样，只不过衡量的是预测排序和真实排序之间的相关性。</p>
+<p><strong>Kendall’s Tau：</strong><br>    和spearman类似，刻画两个排序的统一程度<br>$$<br>\tau=\frac{C-D}{C+D}<br>$$<br>    C为正序对的个数，D为逆序对的个数。</p>
+<h4 id="listwise">listwise</h4><p>这类评价指标能很好的体现前面所说的TopN推荐的特性，因此目前应用最为广泛。最常用的是MAP，NDCG，MRR等。</p>
+<h2 id="neighborhood-based_CF">neighborhood-based CF</h2><p>基于近邻的协同过滤，为一个用户生成推荐的过程主要可以分为两步：</p>
+<ul>
+<li>相似度计算阶段：根据某种相似度度量，找到该用户的近邻</li>
+<li>推荐列表生成阶段：根据损失函数，利用相应的算法求解参数</li>
+</ul>
+<p>相似度度量的方法有很多，前面提到的很多评价指标也可以用来度量相似度，例如Pearson，Spearman，Kendall’s Tau等等。除此之外还有常用的如：余弦距离，jacard距离等。</p>
+<p>基于近邻的协同过滤的关键在于第二步采用怎样的损失函数，损失函数的选择往往与推荐系统的应用场景相关，评价指标表达的是你对这个推荐系统的预期，而损失函数决定了推荐系统的实际效果，应该尽量让损失函数与评价指标一致，这样才能使得到的推荐系统更接近你的期望。根据采用的损失函数的不同可以分为以下三类。</p>
+<h3 id="pointwise-1">pointwise</h3><p>如果评价指标是RMSE，那么相应的损失函数就应该是平方损失函数。可以从理论推导出，通过求条件期望可以得到最优解。而传统的基于用户或者基于物品的协同过滤就是对条件期望的近似。</p>
+<h3 id="pairwise-1">pairwise</h3><p>如果评价指标</p>
+<h3 id="listwise-1">listwise</h3><h2 id="model-based_CF">model-based CF</h2><h3 id="pointwise-2">pointwise</h3><h3 id="pairwise-2">pairwise</h3><h3 id="listwise-2">listwise</h3>
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CF/"> #CF </a>
+          
+            <a href="/tags/learning-to-rank/"> #learning to rank </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-dual-SVM/">机器学习技法(Machine Learning Techniques)——Dual Support Vector Machine</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/09/recommender-system/recommender-system-4-matrix-factorization/">推荐系统中的矩阵分解技术</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2015/11/05/recommender-system/listwise-cf-1/"
+               data-title="Listwise Collaboration Filtering" data-url="/2015/11/05/recommender-system/listwise-cf-1/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#learning_to_rank"><span class="nav-number">1.</span> <span class="nav-text">learning to rank</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#formalization"><span class="nav-number">2.</span> <span class="nav-text">formalization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#评价指标"><span class="nav-number">3.</span> <span class="nav-text">评价指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于评分的评价"><span class="nav-number">3.1.</span> <span class="nav-text">基于评分的评价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于排序的评价"><span class="nav-number">3.2.</span> <span class="nav-text">基于排序的评价</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pointwise"><span class="nav-number">3.2.1.</span> <span class="nav-text">pointwise</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pairwise"><span class="nav-number">3.2.2.</span> <span class="nav-text">pairwise</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#listwise"><span class="nav-number">3.2.3.</span> <span class="nav-text">listwise</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#neighborhood-based_CF"><span class="nav-number">4.</span> <span class="nav-text">neighborhood-based CF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pointwise-1"><span class="nav-number">4.1.</span> <span class="nav-text">pointwise</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pairwise-1"><span class="nav-number">4.2.</span> <span class="nav-text">pairwise</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listwise-1"><span class="nav-number">4.3.</span> <span class="nav-text">listwise</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#model-based_CF"><span class="nav-number">5.</span> <span class="nav-text">model-based CF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pointwise-2"><span class="nav-number">5.1.</span> <span class="nav-text">pointwise</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pairwise-2"><span class="nav-number">5.2.</span> <span class="nav-text">pairwise</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listwise-2"><span class="nav-number">5.3.</span> <span class="nav-text">listwise</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jw-ml"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

@@ -1,0 +1,816 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="big data,spark," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> spark系列三——编程指南 // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              spark系列三——编程指南
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-09-01
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/spark/">spark</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/09/01/spark/spark-3-programming-guide/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/01/spark/spark-3-programming-guide/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <h2 id="总览">总览</h2><p>从高层来看，一个Spark应用包含一个driver程序。</p>
+<p>Spark主要提供了两种抽象的内容，其一是RDD，其二是共享变量。理解了这两个内容就基本理解了Spark编程。</p>
+<h2 id="连接Spark">连接Spark</h2><p>使用scala开发Spark应用时，需要注意scala版本和Spark版本的兼容性。Spark 1.4.1使用的是scala 2.10.x。</p>
+<p>在scala代码的开头需要导入下面两个类。</p>
+<pre><code>import org<span class="class">.apache</span><span class="class">.spark</span><span class="class">.SparkContext</span>
+import org<span class="class">.apache</span><span class="class">.spark</span><span class="class">.SparkConf</span>
+</code></pre><h2 id="初始化Spark">初始化Spark</h2><p>首先需要创建一个SparkContext对象，用来访问Spark集群。而创建SparkContext对象时，需要传入一个SparkConf对象，用来指定Spark集群的一些配置信息，常见的有如下一些：</p>
+<ul>
+<li>setAppName(appName)：应用程序名，用来显示而已。</li>
+<li>setMaster(master)：master可以“local”，表示在本地运行，也可以是指向Spark，Mesos或YARN集群的URL。如果是指向集群的URL，为了避免在程序中硬编码，可以在提交任务时，在spark-submit后用“—master spark://master ip:7077”的方式指定。</li>
+</ul>
+<h2 id="Resilient_Distributed_Datasets_(RDDs)">Resilient Distributed Datasets (RDDs)</h2><p>RDD是Spark的核心内容，是一种抽象的数据格式，支持并行操作和容错。Spark中所有的操作都是在RDD上进行的。</p>
+<h3 id="创建RDD">创建RDD</h3><p>有两种创建RDD的方式，通过一个现有的数据集合或者是从外部的文件系统中创建。</p>
+<h4 id="现有集合">现有集合</h4><p>通过调用SparkContext的parallelize方法，可以从dirver程序现有的集合中创建RDD，集合中的数据会被拷贝到分布式的文件系统中去，用来支持并行计算。</p>
+<pre><code>val data = <span class="function"><span class="title">Array</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span></span>
+val distData = sc.<span class="function"><span class="title">parallelize</span><span class="params">(data)</span></span>
+</code></pre><p>parallelize方法可以在第二个参数中指定partitions的数量，Spark在集群中的每个机器上会对每个partition都起一个任务，因此实际上是指定了一个节点内部的并行程度，一般partition的数量与CPU的核数相同，可以高效利用计算资源。</p>
+<h4 id="外部数据集">外部数据集</h4><p>Spark能从任何Hadoop支持的数据源中创建RDD，包括本地文件系统， HDFS, Cassandra, HBase, Amazon S3,等等。而且Spark支持text files, SequenceFiles,和其他的Hadoop InputFormat.</p>
+<p>文本文件可以通过SparkContext的textFile方法创建RDD，传入textFile的是URI，可以是本地的文件路径(这里的本机路径好像指的是本地的hdfs路径，可以省略前面的”hdfs://user/username”)或者hdfs://, s3n://等等。</p>
+<p>这里的URI可以是一个目录、文本文件或是压缩文件。</p>
+<p>和parallelize方法相同，textFile方法可以通过第二个参数来指定partition的数量，默认是每个block一个partition（hdfs的block默认是64MB）。</p>
+<p>除了文本文件，Spark还支持一些其他的文件格式：</p>
+<ul>
+<li>SparkContext.wholeTextFiles：读取目录下的所有文件，并以(filename, content)对的形式存储。而textFile是按行保存的。</li>
+<li>sequenceFile[K, V]：K，V用来指定key和value的类型，而且都必须是hadoop的Writable接口的子类。Spark会自动将Int转换成IntWritable，String转换成Text。</li>
+<li>SparkContext.hadoopRDD：对于其他类型的Hadoop支持的输入类型，可以使用该函数。</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val inputFormatClass = classOf[SequenceFileInputFormat[Text,Text]]</span><br><span class="line"><span class="tag">var</span> hadoopRdd = sc.<span class="function"><span class="title">hadoopRDD</span><span class="params">(conf, inputFormatClass, classOf[Text], classOf[Text])</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="RDD操作">RDD操作</h3><p>RDD支持两种类型的操作：transformations和actions，其中transformations是将一个RDD转换成另一个RDD，这种操作并不真正求值，只是将该操作相关的信息以链条的形式保存起来，而actions是真正求值，这时候该链条上的所有操作都会依次执行，得到最后的结果，并返回给driver程序。</p>
+<p>这种设计，使得Spark非常高效，因为不用保存中间的结果。但是会带来一个问题，就是每次执行action操作时，该操作链上的所有transformations都会被重复执行。为了避免这个问题，可以在需要的时候对RDD进行持久化。使用persist (or cache)可以在内存中持久化RDD。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val lines = sc.<span class="function"><span class="title">textFile</span><span class="params">(<span class="string">"data.txt"</span>)</span></span></span><br><span class="line">val lineLengths = lines.<span class="function"><span class="title">map</span><span class="params">(s =&gt; s.length)</span></span></span><br><span class="line">val totalLength = lineLengths.<span class="function"><span class="title">reduce</span><span class="params">((a, b)</span></span> =&gt; <span class="tag">a</span> + b)</span><br></pre></td></tr></table></figure>
+<p>上面代码第一行，并不会真正加载数据到内容中，lines仅仅是指向文件的一个指针。第二行的map也不会真正计算，到第三行计算才真正发生，这时Spark会将整个任务划分成很多task，然后分配这些task给集群中的机器，每个节点计算完后，会将结果返回给driver，driver综合所有节点的返回结果得到最终的计算结果。</p>
+<p>如果这时又对lineLengths进行了其他的action操作，那么Spark重新将data.txt加载到内存中来。因此最好是对lineLengths进行持久化，在reduce之前添加如下代码：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lineLengths.<span class="function"><span class="title">persist</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<p>这样在第一次计算发生时，会将lineLengths的结果保存在内存中。对于需要重复利用的数据，持久化会提高效率。</p>
+<h3 id="传递函数">传递函数</h3><p>Spark的大部分API都需要传递函数，有两种推荐的传递函数的方式：</p>
+<ul>
+<li>匿名函数：即lambda表达式，适合写简短的函数。</li>
+<li>全局单例对象（scala中用object定义单例对象，用class定义类）中的静态方法</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">object MyFunctions &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(s: String)</span>:</span> String = &#123; ... &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myRdd.map(MyFunctions.func1)</span><br></pre></td></tr></table></figure>
+<p>如果传递类中的方法，那么在实际调用时，会将整个对象实例传递给集群。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">MyClass</span> &#123;</span><br><span class="line">  def func1<span class="container">(<span class="title">s</span>: <span class="type">String</span>)</span>: <span class="type">String</span> = &#123; ... &#125;</span><br><span class="line">  def doStuff<span class="container">(<span class="title">rdd</span>: <span class="type">RDD</span>[<span class="type">String</span>])</span>: <span class="type">RDD</span>[<span class="type">String</span>] = &#123; rdd.map<span class="container">(<span class="title">func1</span>)</span> &#125;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>在访问外部变量时，情况也是类似。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">val</span> <span class="title">field</span> =</span> <span class="string">"Hello"</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">doStuff</span>(</span>rdd: <span class="type">RDD</span>[<span class="type">String</span>]): <span class="type">RDD</span>[<span class="type">String</span>] = &#123; rdd.map(x =&gt; field + x) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了避免这个问题，简单的方法是将类变量放到函数内部。</p>
+<h3 id="理解闭包">理解闭包</h3><p>Spark最难的问题之一就是当代码在集群上执行的时候，理解变量和方法的作用范围和生命周期。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> counter = <span class="number">0</span></span><br><span class="line"><span class="tag">var</span> rdd = sc.<span class="function"><span class="title">parallelize</span><span class="params">(data)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Wrong: Don't do this!!</span></span><br><span class="line">rdd.<span class="function"><span class="title">foreach</span><span class="params">(x =&gt; counter += x)</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">println</span><span class="params">(<span class="string">"Counter value: "</span> + counter)</span></span></span><br></pre></td></tr></table></figure>
+<p>闭包指的是一个完整的函数，Spark在分配task给节点时，会将函数以闭包的形式打包，也就是将该函数要用到的所有资源封装在一起，构成一个可以独立执行的闭包。例如上面的代码，在执行foreach函数时，会将counter变量复制一份和函数一起传递给计算节点。这样每个节点中都会有一份独立counter变量的拷贝，并不能共享。虽然在计算节点上，counter被修改了，但是driver中的counter任然是0。</p>
+<p>为了解决这个问题，Spark引入了Accumulator，更多细节请查阅相关资料。</p>
+<p>还有一个典型的情况就是输出。如果在一台机器，使用rdd.foreach(println)会得到所有的输出，不会出现什么问题，但是如果在一个集群上，每个executor会将内容输出到本机的stdout中，而不会输出到driver的stdout中。因此，要先使用collect方法让driver得到所有的数据，但是这样可能会导致driver的内存溢出，因此当你只想查看部分结果时，最好使用take方法： rdd.take(100).foreach(println)。</p>
+<h3 id="Transformations">Transformations</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">Transformation</th>
+<th style="text-align:left">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">map(func)</td>
+<td style="text-align:left">Return a new distributed dataset formed by passing each element of the source through a function func.</td>
+</tr>
+<tr>
+<td style="text-align:left">filter(func)</td>
+<td style="text-align:left">Return a new dataset formed by selecting those elements of the source on which func returns true.</td>
+</tr>
+<tr>
+<td style="text-align:left">flatMap(func)</td>
+<td style="text-align:left">Similar to map, but each input item can be mapped to 0 or more output items (so func should return a Seq rather than a single item).</td>
+</tr>
+<tr>
+<td style="text-align:left">mapPartitions(func)</td>
+<td style="text-align:left">Similar to map, but runs separately on each partition (block) of the RDD, so func must be of type Iterator<t> =&gt; Iterator<u> when running on an RDD of type T.</u></t></td>
+</tr>
+<tr>
+<td style="text-align:left">mapPartitionsWithIndex(func)</td>
+<td style="text-align:left">Similar to mapPartitions, but also provides func with an integer value representing the index of the partition, so func must be of type (Int, Iterator<t>) =&gt; Iterator<u> when running on an RDD of type T.</u></t></td>
+</tr>
+<tr>
+<td style="text-align:left">sample(withReplacement, fraction, seed)</td>
+<td style="text-align:left">Sample a fraction fraction of the data, with or without replacement, using a given random number generator seed.</td>
+</tr>
+<tr>
+<td style="text-align:left">union(otherDataset)</td>
+<td style="text-align:left">Return a new dataset that contains the union of the elements in the source dataset and the argument.</td>
+</tr>
+<tr>
+<td style="text-align:left">intersection(otherDataset)</td>
+<td style="text-align:left">Return a new RDD that contains the intersection of elements in the source dataset and the argument.</td>
+</tr>
+<tr>
+<td style="text-align:left">distinct([numTasks]))</td>
+<td style="text-align:left">Return a new dataset that contains the distinct elements of the source dataset.</td>
+</tr>
+<tr>
+<td style="text-align:left">groupByKey([numTasks])</td>
+<td style="text-align:left">When called on a dataset of (K, V) pairs, returns a dataset of (K, Iterable<v>) pairs. Note: If you are grouping in order to perform an aggregation (such as a sum or average) over each key, using reduceByKey or aggregateByKey will yield much better performance. Note: By default, the level of parallelism in the output depends on the number of partitions of the parent RDD. You can pass an optional numTasks argument to set a different number of tasks.</v></td>
+</tr>
+<tr>
+<td style="text-align:left">reduceByKey(func, [numTasks])</td>
+<td style="text-align:left">When called on a dataset of (K, V) pairs, returns a dataset of (K, V) pairs where the values for each key are aggregated using the given reduce function func, which must be of type (V,V) =&gt; V. Like in groupByKey, the number of reduce tasks is configurable through an optional second argument.</td>
+</tr>
+<tr>
+<td style="text-align:left">aggregateByKey(zeroValue)(seqOp, combOp, [numTasks])</td>
+<td style="text-align:left">When called on a dataset of (K, V) pairs, returns a dataset of (K, U) pairs where the values for each key are aggregated using the given combine functions and a neutral “zero” value. Allows an aggregated value type that is different than the input value type, while avoiding unnecessary allocations. Like in groupByKey, the number of reduce tasks is configurable through an optional second argument.</td>
+</tr>
+<tr>
+<td style="text-align:left">sortByKey([ascending], [numTasks])</td>
+<td style="text-align:left">When called on a dataset of (K, V) pairs where K implements Ordered, returns a dataset of (K, V) pairs sorted by keys in ascending or descending order, as specified in the boolean ascending argument.</td>
+</tr>
+<tr>
+<td style="text-align:left">join(otherDataset, [numTasks])</td>
+<td style="text-align:left">When called on datasets of type (K, V) and (K, W), returns a dataset of (K, (V, W)) pairs with all pairs of elements for each key. Outer joins are supported through leftOuterJoin, rightOuterJoin, and fullOuterJoin.</td>
+</tr>
+<tr>
+<td style="text-align:left">cogroup(otherDataset, [numTasks])</td>
+<td style="text-align:left">When called on datasets of type (K, V) and (K, W), returns a dataset of (K, (Iterable<v>, Iterable<w>)) tuples. This operation is also called groupWith.</w></v></td>
+</tr>
+<tr>
+<td style="text-align:left">cartesian(otherDataset)</td>
+<td style="text-align:left">When called on datasets of types T and U, returns a dataset of (T, U) pairs (all pairs of elements).</td>
+</tr>
+<tr>
+<td style="text-align:left">pipe(command, [envVars])</td>
+<td style="text-align:left">Pipe each partition of the RDD through a shell command, e.g. a Perl or bash script. RDD elements are written to the process’s stdin and lines output to its stdout are returned as an RDD of strings.</td>
+</tr>
+<tr>
+<td style="text-align:left">coalesce(numPartitions)</td>
+<td style="text-align:left">Decrease the number of partitions in the RDD to numPartitions. Useful for running operations more efficiently after filtering down a large dataset.</td>
+</tr>
+<tr>
+<td style="text-align:left">repartition(numPartitions)</td>
+<td style="text-align:left">Reshuffle the data in the RDD randomly to create either more or fewer partitions and balance it across them. This always shuffles all data over the network.</td>
+</tr>
+<tr>
+<td style="text-align:left">repartitionAndSortWithinPartitions(partitioner)</td>
+<td style="text-align:left">Repartition the RDD according to the given partitioner and, within each resulting partition, sort records by their keys. This is more efficient than calling repartition and then sorting within each partition because it can push the sorting down into the shuffle machinery.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Actions">Actions</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">Action</th>
+<th style="text-align:left">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">reduce(func)</td>
+<td style="text-align:left">Aggregate the elements of the dataset using a function func (which takes two arguments and returns one). The function should be commutative and associative so that it can be computed correctly in parallel.</td>
+</tr>
+<tr>
+<td style="text-align:left">collect()</td>
+<td style="text-align:left">Return all the elements of the dataset as an array at the driver program. This is usually useful after a filter or other operation that returns a sufficiently small subset of the data.</td>
+</tr>
+<tr>
+<td style="text-align:left">count()</td>
+<td style="text-align:left">Return the number of elements in the dataset.</td>
+</tr>
+<tr>
+<td style="text-align:left">first()</td>
+<td style="text-align:left">Return the first element of the dataset (similar to take(1)).</td>
+</tr>
+<tr>
+<td style="text-align:left">take(n)</td>
+<td style="text-align:left">Return an array with the first n elements of the dataset.</td>
+</tr>
+<tr>
+<td style="text-align:left">takeSample(withReplacement, num, [seed])</td>
+<td style="text-align:left">Return an array with a random sample of num elements of the dataset, with or without replacement, optionally pre-specifying a random number generator seed.</td>
+</tr>
+<tr>
+<td style="text-align:left">takeOrdered(n, [ordering])</td>
+<td style="text-align:left">Return the first n elements of the RDD using either their natural order or a custom comparator.</td>
+</tr>
+<tr>
+<td style="text-align:left">saveAsTextFile(path)</td>
+<td style="text-align:left">Write the elements of the dataset as a text file (or set of text files) in a given directory in the local filesystem, HDFS or any other Hadoop-supported file system. Spark will call toString on each element to convert it to a line of text in the file.</td>
+</tr>
+<tr>
+<td style="text-align:left">saveAsSequenceFile(path) (Java and Scala)</td>
+<td style="text-align:left">Write the elements of the dataset as a Hadoop SequenceFile in a given path in the local filesystem, HDFS or any other Hadoop-supported file system. This is available on RDDs of key-value pairs that implement Hadoop’s Writable interface. In Scala, it is also available on types that are implicitly convertible to Writable (Spark includes conversions for basic types like Int, Double, String, etc).</td>
+</tr>
+<tr>
+<td style="text-align:left">saveAsObjectFile(path) (Java and Scala)</td>
+<td style="text-align:left">Write the elements of the dataset in a simple format using Java serialization, which can then be loaded using SparkContext.objectFile().</td>
+</tr>
+<tr>
+<td style="text-align:left">countByKey()</td>
+<td style="text-align:left">Only available on RDDs of type (K, V). Returns a hashmap of (K, Int) pairs with the count of each key.</td>
+</tr>
+<tr>
+<td style="text-align:left">foreach(func)</td>
+<td style="text-align:left">Run a function func on each element of the dataset. This is usually done for side effects such as updating an Accumulator or interacting with external storage systems. Note: modifying variables other than Accumulators outside of the foreach() may result in undefined behavior. See Understanding closures for more details.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Shuffle">Shuffle</h3><p>有些操作会自动调用Shuffle过程，例如repartition和coalesce, ‘ByKey类型的操作(除了counting)，像groupByKey，reduceByKey, 和join操作，像cogroup，join.</p>
+<p>Shuffle会导致节点间大量的数据传输，因此当数据量很大时尽量不要使用这类操作。</p>
+<h3 id="RDD持久化">RDD持久化</h3><p>Spark最主要的特点之一就是基于内存计算，因此在适当的时候，对RDD进行持久化是很必要的，一般可以提高10倍以上的效率,而且Spark的cache有容错机制，如果cache中的RDD数据出现丢失，Spark会自动重新计算该RDD。</p>
+<p>Spark的持久化有不同的存储等级，常用的方法有persist和cache，其中cache使用默认的等级：StorageLevel.MEMORY_ONLY（只保存在内存中）。可以通过给persist传递参数的方法指定其他等级的持久化。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Storage Level</th>
+<th style="text-align:left">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">MEMORY_ONLY</td>
+<td style="text-align:left">Store RDD as deserialized Java objects in the JVM. If the RDD does not fit in memory, some partitions will not be cached and will be recomputed on the fly each time they’re needed. This is the default level.</td>
+</tr>
+<tr>
+<td style="text-align:left">MEMORY_AND_DISK</td>
+<td style="text-align:left">Store RDD as deserialized Java objects in the JVM. If the RDD does not fit in memory, store the partitions that don’t fit on disk, and read them from there when they’re needed.</td>
+</tr>
+<tr>
+<td style="text-align:left">MEMORY_ONLY_SER</td>
+<td style="text-align:left">Store RDD as serialized Java objects (one byte array per partition). This is generally more space-efficient than deserialized objects, especially when using a fast serializer, but more CPU-intensive to read.</td>
+</tr>
+<tr>
+<td style="text-align:left">MEMORY_AND_DISK_SER</td>
+<td style="text-align:left">Similar to MEMORY_ONLY_SER, but spill partitions that don’t fit in memory to disk instead of recomputing them on the fly each time they’re needed.</td>
+</tr>
+<tr>
+<td style="text-align:left">DISK_ONLY</td>
+<td style="text-align:left">Store the RDD partitions only on disk.</td>
+</tr>
+<tr>
+<td style="text-align:left">MEMORY_ONLY_2, MEMORY_AND_DISK_2, etc.</td>
+<td style="text-align:left">Same as the levels above, but replicate each partition on two cluster nodes.</td>
+</tr>
+<tr>
+<td style="text-align:left">OFF_HEAP (experimental)</td>
+<td style="text-align:left">Store RDD in serialized format in Tachyon. Compared to MEMORY_ONLY_SER, OFF_HEAP reduces garbage collection overhead and allows executors to be smaller and to share a pool of memory, making it attractive in environments with large heaps or multiple concurrent applications. Furthermore, as the RDDs reside in Tachyon, the crash of an executor does not lead to losing the in-memory cache. In this mode, the memory in Tachyon is discardable. Thus, Tachyon does not attempt to reconstruct a block that it evicts from memory. If you plan to use Tachyon as the off heap store, Spark is compatible with Tachyon out-of-the-box. Please refer to this page for the suggested version pairings.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="共享变量">共享变量</h2><h3 id="Broadcast">Broadcast</h3><p>Broadcast变量让每个节点上保存一个只读变量，而不是将该变量的拷贝传递给节点。Spark会使用高效的广播算法来传递Broadcast变量。因此当节点都需要访问同样的数据，而且在数据集很大时，使用Broadcast变量会提高效率。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val broadcastVar = sc.<span class="function"><span class="title">broadcast</span><span class="params">(Array(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span></span>)</span><br><span class="line">broadcastVar.value</span><br></pre></td></tr></table></figure>
+<h3 id="Accumulators">Accumulators</h3><p>就像前面也提到的一样，Accumulators主要用来实现想counter、sum这种需要节点间通信的支持并行的变量。</p>
+<p>如果为Accumulators指定了名字，那么可以在Spark UI上看到。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">scala&gt; val accum = sc.<span class="function"><span class="title">accumulator</span><span class="params">(<span class="number">0</span>, <span class="string">"My Accumulator"</span>)</span></span></span><br><span class="line">accum: spark<span class="class">.Accumulator</span>[Int] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">scala&gt; sc.<span class="function"><span class="title">parallelize</span><span class="params">(Array(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span></span>).<span class="function"><span class="title">foreach</span><span class="params">(x =&gt; accum += x)</span></span></span><br><span class="line">...</span><br><span class="line"><span class="number">10</span>/<span class="number">09</span>/<span class="number">29</span> <span class="number">18</span>:<span class="number">41</span>:<span class="number">08</span> INFO SparkContext: Tasks finished <span class="keyword">in</span> <span class="number">0.317106</span> s</span><br><span class="line"></span><br><span class="line">scala&gt; accum<span class="class">.value</span></span><br><span class="line">res2: Int = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/big-data/"> #big data </a>
+          
+            <a href="/tags/spark/"> #spark </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/01/spark/Spark-4-Cluster-Mode-Overview/">Spark-4-Cluster-Mode-Overview</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/28/programming language/scala-2/">scala编程二——面向对象</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2015/09/01/spark/spark-3-programming-guide/"
+               data-title="spark系列三——编程指南" data-url="/2015/09/01/spark/spark-3-programming-guide/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#总览"><span class="nav-number">1.</span> <span class="nav-text">总览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接Spark"><span class="nav-number">2.</span> <span class="nav-text">连接Spark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化Spark"><span class="nav-number">3.</span> <span class="nav-text">初始化Spark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Resilient_Distributed_Datasets_(RDDs)"><span class="nav-number">4.</span> <span class="nav-text">Resilient Distributed Datasets (RDDs)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建RDD"><span class="nav-number">4.1.</span> <span class="nav-text">创建RDD</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#现有集合"><span class="nav-number">4.1.1.</span> <span class="nav-text">现有集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外部数据集"><span class="nav-number">4.1.2.</span> <span class="nav-text">外部数据集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDD操作"><span class="nav-number">4.2.</span> <span class="nav-text">RDD操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传递函数"><span class="nav-number">4.3.</span> <span class="nav-text">传递函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理解闭包"><span class="nav-number">4.4.</span> <span class="nav-text">理解闭包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transformations"><span class="nav-number">4.5.</span> <span class="nav-text">Transformations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actions"><span class="nav-number">4.6.</span> <span class="nav-text">Actions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shuffle"><span class="nav-number">4.7.</span> <span class="nav-text">Shuffle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDD持久化"><span class="nav-number">4.8.</span> <span class="nav-text">RDD持久化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#共享变量"><span class="nav-number">5.</span> <span class="nav-text">共享变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast"><span class="nav-number">5.1.</span> <span class="nav-text">Broadcast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Accumulators"><span class="nav-number">5.2.</span> <span class="nav-text">Accumulators</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jw-ml"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

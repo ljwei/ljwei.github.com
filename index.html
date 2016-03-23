@@ -127,8 +127,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/09/01/spark-3-programming-guide/">
-                spark系列三——编程指南
+              <a class="post-title-link" href="/2016/03/23/programming language/jvm/">
+                Java虚拟机
               </a>
             
           
@@ -137,14 +137,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-09-01
+          发表于 2016-03-23
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/spark/">spark</a>
+              <a href="/categories/Java/">Java</a>
 
               
               
@@ -157,8 +157,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/09/01/spark-3-programming-guide/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/01/spark-3-programming-guide/"></span>
+            <a href="/2016/03/23/programming language/jvm/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/23/programming language/jvm/"></span>
             </a>
           </span>
           
@@ -173,98 +173,21 @@
 
       
         
-          本文是spark官网上Spark Programming Guide的简单翻译
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/09/01/spark-3-programming-guide/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/07/28/scala-2/">
-                scala编程二—-
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-07-28
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; 分类于
-            
-              <a href="/categories/scala/">scala</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/07/28/scala-2/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/28/scala-2/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h2 id="类和对象">类和对象</h2><h3 id="类、字段和方法">类、字段和方法</h3><ol>
-<li>scala默认访问级别是public。</li>
-<li>scala中的函数有两类，一种是有返回值的叫方法，一种是没有返回值的叫过程。在用法上，方法一般不产生副作用，所有的贡献都通过返回值的形式提供；而过程因为没有返回值，因此其意义就是利用它产生的副作用，修改对象的状态。在写法上，方法在函数体前要加“＝”，表示有返回值。然而方法也可以返回Unit类型，表示返回为空，这时的方法和过程的作用类似。</li>
-</ol>
-<h3 id="分号推断">分号推断</h3><p>分割语句的具体规则很简单，除非以下情况的一种成立，否则行尾被认为是一个分号：</p>
+          <h1 id="编译与解释">编译与解释</h1><p>目前,流行的编程语言有很多,其中Java和C++是最常拿来相互比较的.Java和C++有很多相似的地方,比如面向对象,静态类型等等.但是两者有一个本质的区别,就是Java是解释型的,而C++是编译型的.由于这一区别,可以解释很多Java和C++的不同之处,比如:Java的可移植性好,Java的执行效率低(以前,Java效率确实很低,但是现在JVM经过不断优化,与C++几乎没有差别,甚至更快)等等.</p>
+<p>编译:<br>    利用编译器从源语言编写的源程序产生目标程序的过程。这里的目标程序一般是机器指令,编译的结果与CPU平台有关,因此要在不同的平台中运行,就需要重新编译.</p>
+<p>解释:<br>    与编译一次就产生所有的目标代码不同,解释器是按行读取源程序,然后解释执行.</p>
+<p>目前的很多解释型语言,例如Java和Python,也会有编译的过程,只不过是先由编译器(对Java来说,就是javac.exe)生成与平台无关的中间代码,然后由Java虚拟机来解释执行,这样可以做到与平台无关,即一次编写,到处运行.</p>
+<h1 id="JDK,JRE,JVM">JDK,JRE,JVM</h1><p>这是java中经常涉及到的一些概念,要清楚了解这些概念,就要了解Java的整个体系.Sun官方定义的Java技术体系包括以下几个部分:</p>
 <ul>
-<li>行以一个不能合法作为语句结尾的字结束，如句点或中缀操作符。</li>
-<li>下一行开始于不能作为语句开始的词，如”.”</li>
-<li>行结束于括号或方括号内部。</li>
+<li>Java语言本事</li>
+<li>各种硬件平台上的Java虚拟机</li>
+<li>Class文件格式</li>
+<li>Java API类库</li>
+<li>来自商业机构和开源社区的第三方Java类库</li>
 </ul>
-<h3 id="singleton对象">singleton对象</h3>
+<p>其中,把Java程序设计语言,Java虚拟机,和Java API类库这三部分统称为JDK(Java Development Kit),JDK是用于支持Java开发的最小环境;把Java API类库中的Java SE API子集和Java虚拟机这两部分统称为JRE(Java Runtime Environment),JRE是支持Java程序运行的标准环境;JVM是Java Virtual Machine（Java虚拟机）的缩写，JVM是一种用于计算设备的规范，它是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。</p>
+<p>在Java的发展历史中,出现过很多的JVM,Sun只是定义Java虚拟机规范,很多公司根据这个规范,都有自己实现的JVM,这些JVM各有特点.其中最常见的有:Sun HotSpot VM,BEA JRockit,IBM J9 VM.后来Sun和BEA都被Oracle收购,目前在已发布的JDK中使用的就是HotSpot.</p>
+<h1 id=""> </h1>
         
       
     </div>
@@ -294,8 +217,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/07/27/scala-1/">
-                scala编程一——简介
+              <a class="post-title-link" href="/2016/03/19/machine-learning-algorithm/machine-learning-maximum-entropy-model/">
+                统计学习算法——最大熵模型
               </a>
             
           
@@ -304,14 +227,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-07-27
+          发表于 2016-03-19
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/scala/">scala</a>
+              <a href="/categories/statistical-learning/">statistical learning</a>
 
               
               
@@ -324,8 +247,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/07/27/scala-1/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/27/scala-1/"></span>
+            <a href="/2016/03/19/machine-learning-algorithm/machine-learning-maximum-entropy-model/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/19/machine-learning-algorithm/machine-learning-maximum-entropy-model/"></span>
             </a>
           </span>
           
@@ -340,13 +263,13 @@
 
       
         
-          本文先简要介绍scala语言。
+          <p>本文主要介绍最大熵原理和最大熵模型.最大熵原理是统计学习的一般原理,将它应用到分类得到最大熵模型.<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/07/27/scala-1/">
+            <a class="btn" href="/2016/03/19/machine-learning-algorithm/machine-learning-maximum-entropy-model/#more">
               阅读全文 &raquo;
             </a>
           </div>
-          
+        
       
     </div>
 
@@ -375,8 +298,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/07/08/recommendation-system-2-CF/">
-                推荐系统二——协同过滤
+              <a class="post-title-link" href="/2016/03/18/machine-learning-algorithm/machine-learning-framework/">
+                统计学习框架和基础
               </a>
             
           
@@ -385,14 +308,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-07-08
+          发表于 2016-03-18
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/recommendataion-system/">recommendataion system</a>
+              <a href="/categories/statistical-learning/">statistical learning</a>
 
               
               
@@ -405,8 +328,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/07/08/recommendation-system-2-CF/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/08/recommendation-system-2-CF/"></span>
+            <a href="/2016/03/18/machine-learning-algorithm/machine-learning-framework/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/18/machine-learning-algorithm/machine-learning-framework/"></span>
             </a>
           </span>
           
@@ -421,13 +344,13 @@
 
       
         
-          简单讲解协同过滤算法。
+          <p>本文主要介绍统计学习的基本概念和涉及到的最优化知识.<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/07/08/recommendation-system-2-CF/">
+            <a class="btn" href="/2016/03/18/machine-learning-algorithm/machine-learning-framework/#more">
               阅读全文 &raquo;
             </a>
           </div>
-          
+        
       
     </div>
 
@@ -456,8 +379,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/07/08/recommendation-system-1-introduction/">
-                推荐系统一——好的推荐系统
+              <a class="post-title-link" href="/2016/03/18/machine-learning-algorithm/machine-learning-bayesian-classification/">
+                统计学习算法——贝叶斯分类器
               </a>
             
           
@@ -466,14 +389,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-07-08
+          发表于 2016-03-18
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/recommendation-system/">recommendation system</a>
+              <a href="/categories/statistical-learning/">statistical learning</a>
 
               
               
@@ -486,8 +409,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/07/08/recommendation-system-1-introduction/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/08/recommendation-system-1-introduction/"></span>
+            <a href="/2016/03/18/machine-learning-algorithm/machine-learning-bayesian-classification/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/18/machine-learning-algorithm/machine-learning-bayesian-classification/"></span>
             </a>
           </span>
           
@@ -502,13 +425,13 @@
 
       
         
-          简单介绍推荐系统的相关概念、应用、以及评测方法。
+          <p>贝叶斯分类器是统计学习中的一种重要算法,其在文本分类中效果显著,应用广泛.<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/07/08/recommendation-system-1-introduction/">
+            <a class="btn" href="/2016/03/18/machine-learning-algorithm/machine-learning-bayesian-classification/#more">
               阅读全文 &raquo;
             </a>
           </div>
-          
+        
       
     </div>
 
@@ -537,8 +460,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/06/18/classification-2-tc/">
-                分类问题二——文本分类
+              <a class="post-title-link" href="/2016/03/15/algorithm/algorithm-design/">
+                算法设计
               </a>
             
           
@@ -547,14 +470,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-06-18
+          发表于 2016-03-15
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/categrization/">categrization</a>
+              <a href="/categories/algorithm/">algorithm</a>
 
               
               
@@ -567,8 +490,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/06/18/classification-2-tc/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/18/classification-2-tc/"></span>
+            <a href="/2016/03/15/algorithm/algorithm-design/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/15/algorithm/algorithm-design/"></span>
             </a>
           </span>
           
@@ -583,13 +506,13 @@
 
       
         
-          之前提到了分类问题的一般框架，本文将具体介绍分类问题中的文本分类问题，介绍每一步中有哪些可以选择的方法。
+          <p>1988年，Manber提出一种基于数学归纳法的算法设计方法学，核心是对证明数学定理的智力过程与设计组合算法的过程进行类比。该方法能对很多算法的设计过程进行优雅直观的解释。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/06/18/classification-2-tc/">
+            <a class="btn" href="/2016/03/15/algorithm/algorithm-design/#more">
               阅读全文 &raquo;
             </a>
           </div>
-          
+        
       
     </div>
 
@@ -618,8 +541,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/06/18/classification-1-framework/">
-                语义分析问题总览
+              <a class="post-title-link" href="/2015/12/02/machine-learning-techniques/machine-learning-techniques-Adaptive-Boosting/">
+                机器学习技法(Machine Learning Techniques)——Boosting
               </a>
             
           
@@ -628,14 +551,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-06-18
+          发表于 2015-12-02
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/categorization/">categorization</a>
+              <a href="/categories/Machine-Learning/">Machine Learning</a>
 
               
               
@@ -648,8 +571,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/06/18/classification-1-framework/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/18/classification-1-framework/"></span>
+            <a href="/2015/12/02/machine-learning-techniques/machine-learning-techniques-Adaptive-Boosting/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/02/machine-learning-techniques/machine-learning-techniques-Adaptive-Boosting/"></span>
             </a>
           </span>
           
@@ -664,13 +587,13 @@
 
       
         
-          分类是机器学习的主要用途之一，主要包括文本分类和图像分类，对与这两类问题都有各自适用的算法，但是它们的处理流程，分类系统的设计都是一致的，本系列将探讨分类系统的大致框架，以及面对不同的问题时，处理的办法。
+          <p>Boosting是很常用到的模型融合方法之一，这节课就是介绍相关的内容。<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/06/18/classification-1-framework/">
+            <a class="btn" href="/2015/12/02/machine-learning-techniques/machine-learning-techniques-Adaptive-Boosting/#more">
               阅读全文 &raquo;
             </a>
           </div>
-          
+        
       
     </div>
 
@@ -699,8 +622,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/06/13/beautyofmathematics-2-search/">
-                数学之美二——搜索引擎
+              <a class="post-title-link" href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-linear-SVM/">
+                机器学习技法(Machine Learning Techniques)——Linear Support Vector Machine
               </a>
             
           
@@ -709,14 +632,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-06-13
+          发表于 2015-11-25
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/math/">math</a>
+              <a href="/categories/Machine-Learning/">Machine Learning</a>
 
               
               
@@ -729,8 +652,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/06/13/beautyofmathematics-2-search/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/13/beautyofmathematics-2-search/"></span>
+            <a href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-linear-SVM/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/25/machine-learning-techniques/machine-learning-techniques-linear-SVM/"></span>
             </a>
           </span>
           
@@ -745,13 +668,13 @@
 
       
         
-          本文是关于数学之美第8-11章的学习笔记，主要讲的是搜索引擎背后涉及到的数学。
+          <p>这节讲的是linear、hard-margin的SVM。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/06/13/beautyofmathematics-2-search/">
+            <a class="btn" href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-linear-SVM/#more">
               阅读全文 &raquo;
             </a>
           </div>
-          
+        
       
     </div>
 
@@ -780,8 +703,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/06/10/beautyofmathematics-1/">
-                数学之美一——语言模型
+              <a class="post-title-link" href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-introduction/">
+                机器学习技法(Machine Learning Techniques)——简介
               </a>
             
           
@@ -790,14 +713,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-06-10
+          发表于 2015-11-25
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/math/">math</a>
+              <a href="/categories/Machine-Learning/">Machine Learning</a>
 
               
               
@@ -810,8 +733,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/06/10/beautyofmathematics-1/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/10/beautyofmathematics-1/"></span>
+            <a href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-introduction/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/25/machine-learning-techniques/machine-learning-techniques-introduction/"></span>
             </a>
           </span>
           
@@ -826,13 +749,13 @@
 
       
         
-          数学之美的前三章主要介绍了自然语言处理方法的演化过程，从基于规则到基于统计的模型。
+          <p>从这周开始，跟着台大的林老师学习机器学习技法，相对于之前的机器学习课程，这门课的内容更有深度，也更难一些，希望能通过做笔记的方法，加深对课程内容的理解。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/06/10/beautyofmathematics-1/">
+            <a class="btn" href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-introduction/#more">
               阅读全文 &raquo;
             </a>
           </div>
-          
+        
       
     </div>
 
@@ -861,8 +784,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/06/09/Mooc-MMDS-2-MapReduce/">
-                海量数据挖掘学习笔记二——MapReduce
+              <a class="post-title-link" href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-Bootstrap-Aggregation/">
+                机器学习技法(Machine Learning Techniques)——Bootstrap Aggregation
               </a>
             
           
@@ -871,14 +794,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-06-09
+          发表于 2015-11-25
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/data-mining/">data mining</a>
+              <a href="/categories/Machine-Learning/">Machine Learning</a>
 
               
               
@@ -891,8 +814,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/06/09/Mooc-MMDS-2-MapReduce/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/09/Mooc-MMDS-2-MapReduce/"></span>
+            <a href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-Bootstrap-Aggregation/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/25/machine-learning-techniques/machine-learning-techniques-Bootstrap-Aggregation/"></span>
             </a>
           </span>
           
@@ -907,13 +830,94 @@
 
       
         
-          本文简要介绍Hadoop的整个生态环境和架构，以及MapReduce的基本原理的使用。
+          <p>这节讲的是模型融合中的blending和bagging。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/06/09/Mooc-MMDS-2-MapReduce/">
+            <a class="btn" href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-Bootstrap-Aggregation/#more">
               阅读全文 &raquo;
             </a>
           </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
           
+          
+            
+              <a class="post-title-link" href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-dual-SVM/">
+                机器学习技法(Machine Learning Techniques)——Dual Support Vector Machine
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-11-25
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/Machine-Learning/">Machine Learning</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-dual-SVM/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/25/machine-learning-techniques/machine-learning-techniques-dual-SVM/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>这节讲的是linear、hard-margin的SVM。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/11/25/machine-learning-techniques/machine-learning-techniques-dual-SVM/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
       
     </div>
 
@@ -935,7 +939,7 @@
 
   
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
   </div>
 
 
@@ -969,21 +973,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">32</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">46</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -1014,7 +1018,7 @@
         <div class="copyright">
   
   &copy; &nbsp; 
-  2015
+  2016
   <span class="with-love">
     <i class="icon-heart"></i>
   </span>

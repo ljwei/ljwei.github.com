@@ -1,0 +1,605 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="algorithm design," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> 算法设计 // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              算法设计
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-03-15
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/algorithm/">algorithm</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/03/15/algorithm/algorithm-design/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/15/algorithm/algorithm-design/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>1988年，Manber提出一种基于数学归纳法的算法设计方法学，核心是对证明数学定理的智力过程与设计组合算法的过程进行类比。该方法能对很多算法的设计过程进行优雅直观的解释。<br><a id="more"></a></p>
+<h1 id="数学归纳法">数学归纳法</h1><p>数学归纳法的主要思想是命题无须从什么都没有开始证明，可以通过先证明对于一个小的基本实例集命题是正确的，然后由“若对相对较小的命题实例成立则可导出较大的命题实例成立”的方式，来证明对所有的实例来说命题都是成立的。将该原理转化为算法设计则提示了一种侧重于如何将简单问题的解扩充为较大问题的解的方法。给定一个问题，如果能说明如何应用类似问题（但参数较小）的解决方法进行问题求解，那么任务就完成了。因此它的基本思想是如何扩充一个解决方案而不是从零开始进行构造。</p>
+<h2 id="基本形式">基本形式</h2><p>设T为欲证的定理，若T中含有变量n，n取一切自然数，那么不必直接证明对于所有的n，T都成立，只需证明下面的两个条件成立：</p>
+<ol>
+<li>当n＝1时，T成立；</li>
+<li>对任意n&gt;1，如果n-1时T成立，那么n时T也成立。</li>
+</ol>
+<p>一般来说，条件1很容易证明，因此主要问题在于条件2。</p>
+<h2 id="归纳法变形">归纳法变形</h2><p>变形1（强归纳法）:<br>    如果对于带有参数n的命题P，当n=1时P成立；并且对每个n（n&gt;1),若对任意小于n的自然数P成立能推出对n命题P也成立；那么对任意自然数，P都成立。</p>
+<p>变形2（奇偶归纳法）:<br>    如果对于带有参数n的命题P，当n=1和n=2时P都成立；并且如果对每一个n（n&gt;2)，若n-2时P成立能推出n时P也成立；那么对任意自然数，P都成立。</p>
+<p>变形3（指数归纳法）:<br>    如果对于带有参数n的命题P,当n＝1时P成立；并且如果对每一个n（n大于1，且为2的整数幂），若n/2时命题P成立能推出对n命题P也成立；那么对任意一个2的整数幂的自然数，P都成立。</p>
+<p>变形4（增强归纳假设）：<br>    增强归纳假设是应用归纳法的最重要技巧之一。在应用归纳法时，通常直接推导出$P(&lt;n)\rightarrow P(n)$并不容易。在许多情况下，我们可以增加另一个假设，称之为Q，从而使证明变得容易。即，证明$<a href="n">P and Q</a> \rightarrow P(n)$要相对容易很对</p>
+<h1 id="递推关系">递推关系</h1><p>递推关系是一种函数定义方式，它在函数的定义体中包含了函数本身。通过递推关系，可以更方便的进行算法的分析和设计。</p>
+<p>弱递推：<br>    子问题的规模只减少了常数级。例如Fibonacci数列，求解方法猜测法、特征方程。$$F(n)=F(n-1)+F(n-2)$$</p>
+<p>强递推：<br>    分治法中，问题通常被分割成几个子问题，这些子问题的规模按比例减小。大部分情况下可用主方法求解。$$T(n)=aT(n/b)+cn^k$$</p>
+<h1 id="算法设计">算法设计</h1><p>常用的算法设计思路，包括递归、分治、动规、贪心，都用到了归纳的思想。</p>
+<h2 id="遍历">遍历</h2><p>面对一个算法问题，首先想到的是该问题是否可以通过遍历所有的可能情况来求解，这是最朴素的思想，很多问题都可以通过遍历来求解，但是复杂度比较高，没有考虑到问题的特性。</p>
+<p>常用的图遍历方法有两种：深度优先搜索和广度优先搜索。虽然是针对图的遍历方法，但是实用性很强，因为很多问题都可以用图来表示。因此应用广泛。</p>
+<h3 id="DFS">DFS</h3><p>DFS的具体算法描述为选择一个起始点v作为当前结点，执行如下操作：<br>a. 访问 当前结点，并且标记该结点已被访问，然后跳转到b；<br>b. 如果存在一个和 当前结点 相邻并且尚未被访问的结点u，则将u设为 当前结点，继续执行a；<br>c. 如果不存在这样的u，则进行回溯，回溯的过程就是回退 当前结点；</p>
+<p>有两种方法来实现上面的想法，一是迭代，维护一个栈，每次都将当前结点的邻接结点入栈。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dfs_iter</span><span class="params">(G, s)</span>:</span></span><br><span class="line">    L = []</span><br><span class="line">    seq = []</span><br><span class="line">    L.append(s)</span><br><span class="line">    <span class="keyword">while</span> L:</span><br><span class="line">        u = L.pop()</span><br><span class="line">        <span class="keyword">if</span> u <span class="keyword">in</span> seq:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        seq.append(u)</span><br><span class="line">        L.extend(G[u])</span><br><span class="line">    <span class="keyword">return</span> seq</span><br></pre></td></tr></table></figure>
+<p>二是递归:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DFS</span><span class="params">(v)</span>:</span></span><br><span class="line">    visited[v] = true</span><br><span class="line">    dosomething(v)</span><br><span class="line">    <span class="keyword">for</span> u <span class="keyword">in</span> adjcent_list[v]:</span><br><span class="line">        <span class="keyword">if</span> visited[u] <span class="keyword">is</span> false:</span><br><span class="line">            DFS(u)</span><br></pre></td></tr></table></figure>
+<p>DFS还有一个好处就是，能计算出每个结点的访问时间。利用这个特性，可以用DFS来进行拓扑排序。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dfs_timestamp</span><span class="params">(G, s, d, f, S=None, t=<span class="number">0</span>)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> S <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        S = set()</span><br><span class="line">    d[s] = t</span><br><span class="line">    t += <span class="number">1</span></span><br><span class="line">    S.add(s)</span><br><span class="line">    <span class="keyword">for</span> u <span class="keyword">in</span> G[s]:</span><br><span class="line">        <span class="keyword">if</span> u <span class="keyword">in</span> S:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        t = dfs_timestamp(G, u, d, f, S, t)</span><br><span class="line">    f[s] = t</span><br><span class="line">    t += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> t</span><br></pre></td></tr></table></figure>
+<h3 id="BFS">BFS</h3><p>BFS的具体算法描述为选择一个起始点v放入一个先进先出的队列中，执行如下操作：<br>a. 如果队列不为空，弹出一个队列首元素，记为当前结点，执行b；否则算法结束；<br>b. 将与 当前结点 相邻并且尚未被访问的结点的信息进行更新，并且全部放入队列中，继续执行a；</p>
+<p>实现的思路与DFS相同，不过将栈换成队列就行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bfs_iter</span><span class="params">(G, s)</span>:</span></span><br><span class="line">    q = deque()</span><br><span class="line">    seq = []</span><br><span class="line">    q.append(s)</span><br><span class="line">    <span class="keyword">while</span> q:</span><br><span class="line">        node = q.popleft()</span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">in</span> seq:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        seq.append(node)</span><br><span class="line">        <span class="keyword">for</span> n <span class="keyword">in</span> G[node]:</span><br><span class="line">            q.append(n)</span><br><span class="line">    <span class="keyword">return</span> seq</span><br></pre></td></tr></table></figure>
+<h2 id="递推">递推</h2><p>递推的思路和最基本的数学归纳法的思路完全一致，考虑当n-1时，问题已解决，如果这是要扩展到n，需要做哪些额外的操作。一般的时间复杂度的形式都是：T(n)=T(n-1)+O(n)，因此一般效率并不高。</p>
+<h2 id="分治">分治</h2><p>分治法本质上和递推一样，都是数学归纳法的直接运用。不过递推每次将问题规模减一，往往效率太低，因此分治法每次将原问题分解成规模相等的两个子问题。</p>
+<h2 id="动规">动规</h2><p>动规和分治方法也有很多相似的地方，都是通过组合子问题的解来求解原问题。只不过，动规涉及的问题是最优化问题，这类问题可以有很多可行解，但是希望能找到最优解。而分治法一般用来求解非优化问题。</p>
+<p>应用动态规划来求解问题时，还有一个很重的条件就是，该问题具有最优子结构，即一个问题的最优解可由其子问题的最优解构成。正因为每次将问题规模扩大一点，都需要考虑所有的子问题，因此简单的用递归来实现，效率会非常低，因为会重复求解子问题。</p>
+<p>一般的实现方法有两种，一种是带备忘的自顶向下递归法，一种是自底向上迭代法。</p>
+<p>通过上面可以看到，动态规划的思路也不难，最关键在于如何抓住问题的关键，也就是针对哪些变量来进行归纳，写出递推关系式。在考虑递推关系式时，有时只用考虑一个变量就够了，这种情况往往比较简单，而更难的情况是，要考虑对两个变量同时进行归纳，而且往往这些变量并不那么明显，需要根据问题的特性去发现。这时候就用到了增强归纳条件的方法，因此问题的关键也可以说成，通过增加什么条件可以让归纳变得容易，需要准确定义每个状态，和状态之间的转移。</p>
+<h2 id="贪心">贪心</h2><p>贪心算法与动态规划问题很类似，可以说贪心算法是一种特殊的动态规划算法，因此贪心算法的基本要求也是该问题具有最优子结构，其特殊性在于，这类问题具有贪心选择性质，即可以通过局部最优解选择来构造出全局最优解。也就是说，我们可以直接做出在当前问题中看起来最优的选择，而不必考虑子问题的解。</p>
+<p>通过贪心选择，可以将问题规约为一个唯一的子问题，真是由于这种特性，在实现贪心算法时，往往直接用递归的方法。先做出贪心选择，然后递归求解子问题。</p>
+<p>贪心算法的关键在于，需要敏锐地发现该问题具有贪心选择，这往往并不简单直接，有时需要进行一定的预处理，比如排序。</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm-design/"> #algorithm design </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/18/machine-learning-algorithm/machine-learning-bayesian-classification/">统计学习算法——贝叶斯分类器</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/02/machine-learning-techniques/machine-learning-techniques-Adaptive-Boosting/">机器学习技法(Machine Learning Techniques)——Boosting</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2016/03/15/algorithm/algorithm-design/"
+               data-title="算法设计" data-url="/2016/03/15/algorithm/algorithm-design/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数学归纳法"><span class="nav-number">1.</span> <span class="nav-text">数学归纳法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本形式"><span class="nav-number">1.1.</span> <span class="nav-text">基本形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归纳法变形"><span class="nav-number">1.2.</span> <span class="nav-text">归纳法变形</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#递推关系"><span class="nav-number">2.</span> <span class="nav-text">递推关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法设计"><span class="nav-number">3.</span> <span class="nav-text">算法设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#遍历"><span class="nav-number">3.1.</span> <span class="nav-text">遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DFS"><span class="nav-number">3.1.1.</span> <span class="nav-text">DFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BFS"><span class="nav-number">3.1.2.</span> <span class="nav-text">BFS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#递推"><span class="nav-number">3.2.</span> <span class="nav-text">递推</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分治"><span class="nav-number">3.3.</span> <span class="nav-text">分治</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动规"><span class="nav-number">3.4.</span> <span class="nav-text">动规</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#贪心"><span class="nav-number">3.5.</span> <span class="nav-text">贪心</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jw-ml"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

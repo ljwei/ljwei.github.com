@@ -1,0 +1,655 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="BoW,categrization,text categorization," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> 分类问题二——文本分类 // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              分类问题二——文本分类
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-18
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/categrization/">categrization</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/06/18/machine-learning-algorithm/classification-2-tc/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/18/machine-learning-algorithm/classification-2-tc/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>之前提到了分类问题的一般框架，本文将具体介绍分类问题中的文本分类问题，介绍每一步中有哪些可以选择的方法。</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/classification/tc/tc1.jpg" alt=""></p>
+<p>文本分类的大致流程如上图所示。</p>
+<h2 id="特征表示">特征表示</h2><p>前面提到过，特征表示指的是将文本从原始空间转换到特征空间的过程。更加具体地，可以将特征表示细分为以下几个过程：</p>
+<ul>
+<li><strong>表示模型</strong></li>
+<li><strong>特征选择</strong></li>
+<li><strong>特征权重计算</strong></li>
+</ul>
+<h3 id="表示模型">表示模型</h3><p>要将文本映射到特征空间，首先得确定要使用怎样的模型来表示文本的特征。常见的特征表示方式有：向量空间模型、概率分布模型等，但是最常用的是向量空间模型。</p>
+<p><strong>向量空间模型（ Vector Space Model，VSM）</strong>：向量空间模型就是用一个向量来表示一篇文档。由于文档有意义的基本单位是单词，因此在使用向量表示时，一般以词为单位，如果假设这些词之间没有关联，这就是现在最流行的<strong>词袋模型（BoW，Bag of Words）</strong>。现在词袋模型应用广泛，而且推广到了图像分类中，对应的模型叫做<strong>视觉词袋模型（BoVW，Bag of Visual Words）</strong>。</p>
+<p>词袋模型基于这样一个关键假设，即文章中<strong>词条出现的顺序是无关紧要的</strong>，它们对于文本的类别所起的作用是相互独立的，因此可以把文本看作一系列无序词条的集合。在该模型中，文本空间被视为一组正交词条（即词典）向量所张成的向量空间。由于一般数据集中，词典的规模很大，而向量的维数跟词典的大小相同，因而向量的维数往往是惊人的，导致计算量很大，而且词典中包含所有的单词，里面会包含很多噪声，而且特征不明显。</p>
+<p>正是由于上面提到的种种问题，需要对这个特征空间进行降维，而这个过程就是下面将提到的特征选择。</p>
+<p><strong>概率分布模型</strong>：词袋模型在需要深层分析的场合就会显得太过简化了。例如在语义分析里，“你打了我”和“我打了你”，意思是相反的，但用词袋模型表示后，这两句话是向量表示的等价的，这显然是不合理的。因此提出了n元模型，关于n元统计模型的内容在<a href="http://jwli.ml/2015/06/10/beautyofmathematics-1/" target="_blank" rel="external">另一篇文章</a>中有介绍。</p>
+<h3 id="特征选择">特征选择</h3><p>特征选择就是从词典中选出最有代表性的单词，以此作为新的词典，这样可以降低特征空间的维数，从而达到降低计算复杂度和提高分类准确率的目的。因此需要一种能准确度量对于数据集来说，重要的词的标准。对于文本分类来说，由于各种统计量很容易计算，而且这些统计量又能很好的表示一些特性，因此常用统计量来进行特征选择。在图像分类中，这样的方法就不太行了。常用的度量有如下一些统计量：</p>
+<h4 id="信息增益（IG，Information_Gain）">信息增益（IG，Information Gain）</h4><p>要了解信息增益，先得知道熵。熵是信息论中的概念，用来度量信息的不确定性。对于随机变量C，其熵为：</p>
+<span>$$H(C)=-\sum{p(c_i)\log{p(c_i)}}$$</span><!-- Has MathJax -->
+<p>利用熵就可以知道系统当前的状态，但是要怎样度量一个状态的变化呢？那就必须要知道，给定条件T下的熵，而这就是条件熵：</p>
+<span>$$H(C|T)=\sum{p(t_i)H(C|t_i)}$$</span><!-- Has MathJax -->
+<p>那么，信息增益可表示为：</p>
+<span>$$IG(C)=H(C)-H(C|T)$$</span><!-- Has MathJax -->
+<p>对应与文本分类这个具体任务，C表示文档类别，W表示一个单词，W只有两种状态，即这个词在或者不在该类别中。因此上面的式子可写成：</p>
+<span>$$IG(C)=H(C)-H(C|W) \\
+＝-\sum{p(c_i)\log{p(c_i)}}
++ p(w)\sum{p(C)\log{p(C|w)}}
++ p(\overline{w})\sum{p(C)\log{p(C|\overline{w})}}$$</span><!-- Has MathJax -->
+<p>IG值越高，表示一个词对分类起到的作用越大，设定一个阈值就可进行过滤掉不重要的词。</p>
+<h4 id="词条与类别的互信息（MI，Mutual_information）">词条与类别的互信息（MI，Mutual information）</h4><p>词条W与类别<span>$c_i$</span><!-- Has MathJax -->的互信息为:</p>
+<span>$$MI(W, c_i)=\log{\frac{p(W|c_i)}{p(w)}}$$</span><!-- Has MathJax -->
+<p>对整个系统来说，词条W的互信息为:</p>
+<span>$$MI_{avg}(W, c_i)=\sum_i{p(c_i)\log{\frac{p(W|c_i)}{p(W)}}}$$</span><!-- Has MathJax -->
+<p>需要选取互信息量最大的名词作为特征词，这样的词在某个类中的出现概率大，而在其他类中出现的概率小。这是因为互信息量越大，名词和类别之间同时出现的概率也越大。</p>
+<h4 id="词条的<!-￼14->统计（CHI）">词条的<span>$\chi^2$</span><!-- Has MathJax -->统计（CHI）</h4><h4 id="词条的期望交叉熵（CE）">词条的期望交叉熵（CE）</h4><span>$$CE(W)=\sum_i{p(c_i|W)\log{\frac{p(c_i|W)}{p(c_i)}}}$$</span><!-- Has MathJax -->
+<p>交叉熵反应了文本类别的概率分布与在出现了某个词条的情况下文本类别的概率分布之间的距离。词条的交叉熵越大，对文本类别分布影响也就越大。所以选CE最大的K个词条作为最终的特征项。</p>
+<h3 id="特征权重计算">特征权重计算</h3><p>特征选择中选择的是对整个系统来说最重要的K个词（最能区分各个类别的词），那么接下来的工作就是将每篇文档映射到K维特征空间中，即用一个K维向量来表示，每维代表了该篇文档在这个维度上的权重。那么怎样来计算这个权重呢？最常用的是词频-逆文档频率（TF-IDF），关于TF-IDF的具体内容，在<a href="http://jwli.ml/2015/06/05/Mooc-MMDS-1-basic-concepts/" target="_blank" rel="external">另一篇文章</a>中有具体介绍，这里不在赘述。</p>
+<h2 id="分类算法">分类算法</h2><p>下面简单介绍文本分类中常用的一些算法，以及它们的优缺点，关于算法的详细内容，会找时间再详细分析。</p>
+<h3 id="基于距离的分类算法">基于距离的分类算法</h3><p>通过上面的过程，已经可以得到每篇文档的特征向量了。那么如何对这些向量进行分类呢？最直接的思路就是，一篇文档的类别应该由距离其最近的文档来决定，而这就是kNN。在应用算法分类前，还需要解决怎样来度量距离的问题。</p>
+<h4 id="距离度量">距离度量</h4><p>在这里，距离度量其实分成两大类，一种是真的度量距离，而一种是度量相似度。但其实两者可以统一，因为（1-相似度）就是距离。</p>
+<p><strong>距离</strong></p>
+<p>距离的度量方法有很多，只需要满足如下4个性质，就可以用来度量距离：</p>
+<ol>
+<li>到自己的距离为0</li>
+<li>距离非负</li>
+<li>对称性</li>
+<li>三角形法则</li>
+</ol>
+<p>距离在高维空间中，可以用范数来度量。</p>
+<p><strong>闵可夫斯基距离（Minkowski Distance）</strong>就是p范数：</p>
+<span>$$dist(X,Y)=(\sum_i{|x_i-y_i|^p})^{1/p}$$</span><!-- Has MathJax -->
+<p>当p＝1时，就是<strong>曼哈顿距离（Manhattan Distance）</strong>，也称1范数：</p>
+<span>$$dist(X,Y)=\sum_i{|x_i-y_i|}$$</span><!-- Has MathJax -->
+<p>当p=2时，就是<strong>欧几里得距离（Euclidean Distance）</strong>，也称2范数：</p>
+<span>$$dist(X,Y)=\sqrt{\sum_i{(x_i-y_i)^2}}$$</span><!-- Has MathJax -->
+<p>当p趋近无穷时，就是<strong>切比雪夫距离（Chebyshev Distance）</strong>，也称无穷范数：</p>
+<span>$$dist(X,Y)=max|x_i-y_i|$$</span><!-- Has MathJax -->
+<p>其他的距离度量还有：</p>
+<p><strong>海明距离（Hamming Distance）</strong>：两个向量中不同分量的个数，一般用于布尔向量。</p>
+<p><strong>编辑距离（Edit Distance）</strong>：用于比较字符串，表示将一个字符串转换到另一个所需要的单字符插入及删除操作的最小数目。</p>
+<p><strong>相似度</strong></p>
+<p>相似度度量（Similarity），即计算个体间的相似程度，与距离度量相反，相似度度量的值越小，说明个体间相似度越小，差异越大。</p>
+<p>余弦相似度（Cosine Similarity），用来度量两个向量的夹角：</p>
+<span>$$sim(X,Y)=\frac{X\cdot Y}{\|X\| \|Y\|}$$</span><!-- Has MathJax -->
+<p>Jaccard相似系数（Jaccard Coefficient），用来度量两个集合的相相似度：</p>
+<span>$$sim(X,Y)=max|x_i-y_i|$$</span><!-- Has MathJax -->
+<h4 id="kNN">kNN</h4><p>k最近邻算法(k-Nearest Neighbor，kNN)是根据待分样本的最相似的几个样本的类别来决定其所属类别，是最简单有效的机器学习算法之一。对于一个样本，我们可以在特征空间中找到和它最相似(即特征空间中最邻近)的k个样本，如果k个样本中的大多数属于某一个类别，则该样本也属于这个类别。当k = 1 时，也称为最近邻（NN）算法。</p>
+<p>kNN方法相当于非参数密度估计方法，在决策时只与极少量的相邻样本有关。由于KNN方法主要靠周围有限的邻近的样本，因此对于类域的交叉或重叠较多的非线性可分数据来说，kNN方法较其他方法更为适合，可以很好的克服了线性不可分问题的缺陷。</p>
+<p>在kNN算法中，所选择的邻居都是已经有类别标记的样本，这也意味着kNN算法不需要训练阶段。因此，kNN算法也很适用于分类标准随时会产生变化的需求。只要删除旧的标记样本，添加新的标记样本，就改变了分类准则。<br>但是，kNN算法也存在一些不足之处。</p>
+<ul>
+<li>一是在判断一个样本的类别时，需要把它与所有已知类别的样本都比较一遍，这样计算开销是相当大的。比如一个文本分类数据有2 万个训练样本，为了判断一个新样本的类别，也要做2万次的向量比较。虽然可以通过对样本空间建立索引来提高找到最近邻的效率，但是效率依然低于其他分类器。</li>
+<li>二是当样本不平衡时，如一个类的样本容量很大，而其他类样本容量很小时，有可能导致当输入一个新样本时，该样本的k 个邻居中大容量类的样本占多数，导致分类错误。</li>
+<li>三是kNN算法很容易受到噪声特征的影响，在进行kNN分类之前需要进行特征选择。</li>
+</ul>
+<h4 id="局部敏感哈希(Locality-Sensitive_Hashing，LSH）">局部敏感哈希(Locality-Sensitive Hashing，LSH）</h4><p>为了应对kNN存在维度灾难的问题，出现了很多解决的办法，一种思路是建立高效索引，可以很快找到距离最近的k个点，比如kd-tree，r-tree等等。另一种思路是利用哈希，将相似的项映射到相同的桶中，这样要找k个最近的点时，只用在桶中找就可以了。关于LSH的内容很多，找时间再详细了解一些。</p>
+<h3 id="其他分类算法">其他分类算法</h3><h4 id="SVM">SVM</h4><p>支持向量机（Support Vector Machine，SVM）是一个经典的监督学习算法，它在解决很多任务中表现很强的优势。</p>
+<p>支持向量机的求解可以通过二次优化方法得到全局最优解，这使它有着其他统计学习技术难以比拟的优越性。同时，还使用核函数将原始的样本空间向高维空间进行变换能够解决原始样本线性不可分的问题。支持向量机的优点在于通用性较好，且分类精度高、分类速度快、分类速度与训练样本个数无关，是最常用的分类器之一。</p>
+<h4 id="朴素贝叶斯">朴素贝叶斯</h4><p>朴素贝叶斯假设样本每一维之间是彼此独立的。但这种情况在实际情况中经常是不成立的，因此其分类准确率可能会下降。比如在文本分类中，一个样本是一篇文档，每一维特征可以看出是一个词。但是词语之间有明显的所谓“共现”关系，在不同主题的文章中，可能共现的次数或频率有变化，但彼此间绝对谈不上独立。</p>
+<p>但在许多场合，朴素贝叶斯分类算法的假设依然取得很好的性能，并且十分简单，可以与很多复杂的分类算法相媲美，是自然语言处理中最为常用的算法之一。　</p>
+<h4 id="决策树">决策树</h4><p>决策树（Decision Tree）是一种简单但是广泛使用的分类器。通过训练数据构建决策树，可以高效的对未知的数据进行分类。决策树有两大优点：</p>
+<ol>
+<li>决策树模型可以读性好，具有描述性，有助于人工分析；</li>
+<li>效率高，决策树只需要一次构建，反复使用，每一次预测的最大计算次数不超过决策树的深度。</li>
+</ol>
+<p>决策树的典型算法有ID3，C4.5，CART等。相对于其它算法，决策树易于理解和实现，人们在通过解释后都有能力去理解决策树所表达的意义。决策树可以同时处理不同类型的属性,并且在相对短的时间内能够对大型数据源做出可行且效果良好的结果。</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/BoW/"> #BoW </a>
+          
+            <a href="/tags/categrization/"> #categrization </a>
+          
+            <a href="/tags/text-categorization/"> #text categorization </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/08/recommender-system/recommender-system-1-introduction/">推荐系统一——好的推荐系统</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/18/machine-learning-algorithm/classification-1-framework/">语义分析问题总览</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2015/06/18/machine-learning-algorithm/classification-2-tc/"
+               data-title="分类问题二——文本分类" data-url="/2015/06/18/machine-learning-algorithm/classification-2-tc/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#特征表示"><span class="nav-number">1.</span> <span class="nav-text">特征表示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表示模型"><span class="nav-number">1.1.</span> <span class="nav-text">表示模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征选择"><span class="nav-number">1.2.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#信息增益（IG，Information_Gain）"><span class="nav-number">1.2.1.</span> <span class="nav-text">信息增益（IG，Information Gain）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#词条与类别的互信息（MI，Mutual_information）"><span class="nav-number">1.2.2.</span> <span class="nav-text">词条与类别的互信息（MI，Mutual information）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#词条的<!-￼14->统计（CHI）"><span class="nav-number">1.2.3.</span> <span class="nav-text">词条的$\chi^2$统计（CHI）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#词条的期望交叉熵（CE）"><span class="nav-number">1.2.4.</span> <span class="nav-text">词条的期望交叉熵（CE）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征权重计算"><span class="nav-number">1.3.</span> <span class="nav-text">特征权重计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类算法"><span class="nav-number">2.</span> <span class="nav-text">分类算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于距离的分类算法"><span class="nav-number">2.1.</span> <span class="nav-text">基于距离的分类算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#距离度量"><span class="nav-number">2.1.1.</span> <span class="nav-text">距离度量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kNN"><span class="nav-number">2.1.2.</span> <span class="nav-text">kNN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#局部敏感哈希(Locality-Sensitive_Hashing，LSH）"><span class="nav-number">2.1.3.</span> <span class="nav-text">局部敏感哈希(Locality-Sensitive Hashing，LSH）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他分类算法"><span class="nav-number">2.2.</span> <span class="nav-text">其他分类算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SVM"><span class="nav-number">2.2.1.</span> <span class="nav-text">SVM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#朴素贝叶斯"><span class="nav-number">2.2.2.</span> <span class="nav-text">朴素贝叶斯</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#决策树"><span class="nav-number">2.2.3.</span> <span class="nav-text">决策树</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jw-ml"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
