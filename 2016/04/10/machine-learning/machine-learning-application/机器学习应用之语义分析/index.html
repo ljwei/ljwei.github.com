@@ -1,0 +1,610 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="LDA,VSM,semantic analysis," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> 机器学习应用之语义分析 // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              机器学习应用之语义分析
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-04-10
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/machine-learning/">machine learning</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/04/10/machine-learning/machine-learning-application/机器学习应用之语义分析/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/10/machine-learning/machine-learning-application/机器学习应用之语义分析/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>语义分析是指运用各种机器学习方法，挖掘与学习文本、图片等的深层次概念。属于自然语言处理的范畴，但是在很多场景中，都需要用到语义分析，本文梳理语义分析的有关内容。</p>
+<h1 id="数据类型">数据类型</h1><p>应用机器学习技术来解决问题，离不开数据的支撑。在计算机的世界中，最主要的数据类型包括：</p>
+<ul>
+<li>文本</li>
+<li>音频</li>
+<li>图片</li>
+<li>视频</li>
+</ul>
+<p>将机器学习的技术应用在上面的每一种数据类型上，再结合实际的需求，都会产生一个应用方向。例如，如果希望对文本数据进行分类，那么就是文本分类；如果希望能识别语音中的信息，那么就是语音识别。虽然每种数据类型对应的处理方法不同，特征提取的方法不同，但是将这些数据类型表示成可被计算机处理的特征表示后，都可以利用合适的机器学习方法来解决，而且在很多地方，这些方法是相通的。例如，很多分类算法既可以用于文本分类，也可以用于图片分类。</p>
+<p>机器学习算法是很难直接处理这些数据的，因此需要将这些数据变成更直接更方便处理的格式，也就是特征表示，这就是语义分析的作用。</p>
+<h1 id="文本分析">文本分析</h1><p>文本分析首先需要对文本进行一些预处理，主要包括中文分词、词性标注等等内容。然后再根据采用的模型对文档进行建模。</p>
+<h2 id="文档模型">文档模型</h2><p>要将文本映射到特征空间，首先得确定要使用怎样的模型来表示文本的特征。常见的特征表示方式有：布尔模型、向量空间模型、概率模型等，但是最常用的是向量空间模型。</p>
+<h3 id="布尔模型">布尔模型</h3><p>布尔模型是最早出现的文档表示模型，基本思路就是用一个很大的布尔向量来表示文档，其中向量的每一位为0或1，表示该单词是否出现在了文档中。</p>
+<h3 id="向量空间模型（_Vector_Space_Model，VSM）">向量空间模型（ Vector Space Model，VSM）</h3><h4 id="表示模型">表示模型</h4><p>向量空间模型就是用一个向量来表示一篇文档，但是每一位不在是0或1，而是一个权值，最常见的是TF-IDF值。由于文档有意义的基本单位是单词，因此在使用向量表示时，一般以词为单位，如果假设这些词之间没有关联，这就是现在最流行的<strong>词袋模型（BoW，Bag of Words）</strong>。现在词袋模型应用广泛，而且推广到了图像分类中，对应的模型叫做<strong>视觉词袋模型（BoVW，Bag of Visual Words）</strong>。</p>
+<p>词袋模型基于这样一个关键假设，即文章中<strong>词条出现的顺序是无关紧要的</strong>，它们对于文本的类别所起的作用是相互独立的，因此可以把文本看作一系列无序词条的集合。在该模型中，文本空间被视为一组正交词条（即词典）向量所张成的向量空间。由于一般数据集中，词典的规模很大，而向量的维数跟词典的大小相同，因而向量的维数往往是惊人的，导致计算量很大，而且词典中包含所有的单词，里面会包含很多噪声，而且特征不明显。</p>
+<p>正是由于上面提到的种种问题，需要对这个特征空间进行降维，而这个过程就是下面将提到的特征选择。</p>
+<h4 id="特征选择">特征选择</h4><p>特征选择就是从词典中选出最有代表性的单词，以此作为新的词典，这样可以降低特征空间的维数，从而达到降低计算复杂度和提高分类准确率的目的。因此需要一种能准确度量对于数据集来说，重要的词的标准。对于文本分类来说，由于各种统计量很容易计算，而且这些统计量又能很好的表示一些特性，因此常用统计量来进行特征选择。在图像分类中，这样的方法就不太行了。常用的度量有如下一些统计量：</p>
+<h5 id="信息增益（IG，Information_Gain）">信息增益（IG，Information Gain）</h5><p>要了解信息增益，先得知道熵。熵是信息论中的概念，用来度量信息的不确定性。对于随机变量C，其熵为：</p>
+<p>$$<br>H(C)=-\sum{p(c_i)\log{p(c_i)}}<br>$$</p>
+<p>利用熵就可以知道系统当前的状态，但是要怎样度量一个状态的变化呢？那就必须要知道，给定条件T下的熵，而这就是条件熵：</p>
+<p>$$<br>H(C|T)=\sum{p(t_i)H(C|t_i)}<br>$$</p>
+<p>那么，信息增益可表示为：</p>
+<p>$$<br>IG(C)=H(C)-H(C|T)<br>$$</p>
+<p>对应与文本分类这个具体任务，C表示文档类别，W表示一个单词，W只有两种状态，即这个词在或者不在该类别中。因此上面的式子可写成：</p>
+<p>$$<br>IG(C)=H(C)-H(C|W) \<br>＝-\sum{p(c_i)\log{p(c_i)}}</p>
+<ul>
+<li>p(w)\sum{p(C)\log{p(C|w)}}</li>
+<li>p(\overline{w})\sum{p(C)\log{p(C|\overline{w})}}<br>$$</li>
+</ul>
+<p>IG值越高，表示一个词对分类起到的作用越大，设定一个阈值就可进行过滤掉不重要的词。</p>
+<h5 id="词条与类别的互信息（MI，Mutual_information）">词条与类别的互信息（MI，Mutual information）</h5><p>词条W与类别$ math c_i $的互信息为:</p>
+<p>$$<br>MI(W, c_i)=\log{\frac{p(W|c_i)}{p(w)}}<br>$$</p>
+<p>对整个系统来说，词条W的互信息为:</p>
+<p>$$<br>MI_{avg}(W, c_i)=\sum_i{p(c_i)\log{\frac{p(W|c_i)}{p(W)}}}<br>$$</p>
+<p>需要选取互信息量最大的名词作为特征词，这样的词在某个类中的出现概率大，而在其他类中出现的概率小。这是因为互信息量越大，名词和类别之间同时出现的概率也越大。</p>
+<h5 id="词条的$\chi^2$统计（CHI）">词条的$\chi^2$统计（CHI）</h5><h5 id="词条的期望交叉熵（CE）">词条的期望交叉熵（CE）</h5><p>$$<br>CE(W)=\sum_i{p(c_i|W)\log{\frac{p(c_i|W)}{p(c_i)}}}<br>$$</p>
+<p>交叉熵反应了文本类别的概率分布与在出现了某个词条的情况下文本类别的概率分布之间的距离。词条的交叉熵越大，对文本类别分布影响也就越大。所以选CE最大的K个词条作为最终的特征项。</p>
+<h4 id="特征权重计算">特征权重计算</h4><p>特征选择中选择的是对整个系统来说最重要的K个词（最能区分各个类别的词），那么接下来的工作就是将每篇文档映射到K维特征空间中，即用一个K维向量来表示，每维代表了该篇文档在这个维度上的权重。那么怎样来计算这个权重呢？最常用的是词频-逆文档频率（TF-IDF）。</p>
+<h3 id="概率分布模型">概率分布模型</h3><p>词袋模型在需要深层分析的场合就会显得太过简化了。例如在语义分析里，“你打了我”和“我打了你”，意思是相反的，但用词袋模型表示后，这两句话是向量表示的等价的，这显然是不合理的。因此提出了n元模型，以及现在应用广泛的LDA主题模型。关于这部分的内容很多，网上可以找多很多很好的文章。</p>
+<h1 id="图片理解">图片理解</h1><p>todo</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LDA/"> #LDA </a>
+          
+            <a href="/tags/VSM/"> #VSM </a>
+          
+            <a href="/tags/semantic-analysis/"> #semantic analysis </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/04/machine-learning/machine-learning-application/机器学习应用概述/">机器学习应用概述</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2016/04/10/machine-learning/machine-learning-application/机器学习应用之语义分析/"
+               data-title="机器学习应用之语义分析" data-url="/2016/04/10/machine-learning/machine-learning-application/机器学习应用之语义分析/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">45</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据类型"><span class="nav-number">1.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本分析"><span class="nav-number">2.</span> <span class="nav-text">文本分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文档模型"><span class="nav-number">2.1.</span> <span class="nav-text">文档模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#布尔模型"><span class="nav-number">2.1.1.</span> <span class="nav-text">布尔模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向量空间模型（_Vector_Space_Model，VSM）"><span class="nav-number">2.1.2.</span> <span class="nav-text">向量空间模型（ Vector Space Model，VSM）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#表示模型"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">表示模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特征选择"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">特征选择</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#信息增益（IG，Information_Gain）"><span class="nav-number">2.1.2.2.1.</span> <span class="nav-text">信息增益（IG，Information Gain）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#词条与类别的互信息（MI，Mutual_information）"><span class="nav-number">2.1.2.2.2.</span> <span class="nav-text">词条与类别的互信息（MI，Mutual information）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#词条的$\chi^2$统计（CHI）"><span class="nav-number">2.1.2.2.3.</span> <span class="nav-text">词条的$\chi^2$统计（CHI）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#词条的期望交叉熵（CE）"><span class="nav-number">2.1.2.2.4.</span> <span class="nav-text">词条的期望交叉熵（CE）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特征权重计算"><span class="nav-number">2.1.2.3.</span> <span class="nav-text">特征权重计算</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#概率分布模型"><span class="nav-number">2.1.3.</span> <span class="nav-text">概率分布模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图片理解"><span class="nav-number">3.</span> <span class="nav-text">图片理解</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jw-ml"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
