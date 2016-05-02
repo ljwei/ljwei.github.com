@@ -1,0 +1,863 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="numpy,python," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> NumPy basics // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              NumPy basics
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2016-04-19
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/python/">python</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/04/19/python/numpy-basics/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/19/python/numpy-basics/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>numpy应用广泛，本文简单介绍了numpy的主要特点和用法。<br><a id="more"></a></p>
+<p>Python作为一种脚本语言，在效率上确实没法跟C++或Java比，但是其在数据处理方面，有着其他语言所没有的灵活。使用Python可以很方便的进行数据相关处理，而且Python还有很多很好用的数据处理相关的库，比如numpy、pandas等等。由于numpy是大多数库的基础，因此先来简单了解一下numpy。内容转自<a href="http://pda.readthedocs.org/en/latest/index.html" target="_blank" rel="external">Python For Data Analysis</a>。</p>
+<h1 id="NumPy简介">NumPy简介</h1><p>NumPy 是 Numerical Python 的简称，是高性能计算和数据分析的基础包。本书中几乎所有高级工具都是建立在它的基础之上，下面是它所能做的一些事情：</p>
+<ul>
+<li>ndarray，快速和节省空间的多维数组，提供数组化的算术运算和高级的 广播 功能。</li>
+<li>使用标准数学函数对整个数组的数据进行快速运算，而不需要编写循环。</li>
+<li>读取/写入磁盘上的阵列数据和操作存储器映像文件的工具。</li>
+<li>线性代数，随机数生成，和傅里叶变换的能力。</li>
+<li>集成C，C++，Fortran代码的工具。</li>
+</ul>
+<p>从生态系统的角度看，最后一点是最为重要的。因为NumPy 提供了易用的C API，它可以很容易的将数据传递到使用低级语言编写的外部库，也可以使外部库返回NumPy数组数据到Python。 这一特性使得Python成为包装传统的C/C++/Fortran代码库，并给它们一个动态的、易于使用的接口的首选语言。</p>
+<p>虽然NumPy本身并没有提供非常高级的数据分析功能，但是了解NumPy的数组和面向数组的计算将会帮助你高效的使用类似于pandas这样的工具。</p>
+<p>对于大多数的数据分析应用来说，我关注的主要功能是：</p>
+<ul>
+<li>快速的矢量化数组操作：数据切割和清除，子集和过滤，转化和任何其它类型的计算</li>
+<li>通用的数组算法，例如：sorting，unique和set操作</li>
+<li>有效的描述性统计和聚集/汇总数据</li>
+<li>数据对齐、关系数据的合并操作、异构数据的拼接操作</li>
+<li>使用数组表达式来表示条件逻辑，而不是用带有 if-elif-else 分支的循环来表示</li>
+<li>组间数据的操作（聚合，转换，功能应用）。关于这一点详见 第5章</li>
+</ul>
+<p>虽然NumPy提供了这些操作的计算功能，但你或许希望使用pandas作为大多数数据分析的基础（特别是结构化或表格数据），因为它提供了一个丰富的，高级的接口使得常见的数据任务非常简洁和简单。 pandas也提供了更多的一些特定领域的功能，如时间数组操作，这是NumPy所没有的。</p>
+<h2 id="NumPy_ndarray：多维数组对象">NumPy ndarray：多维数组对象</h2><p>NumPy的一个关键特性是它的N维数组对象(ndarray)，它在Python中是一个大型数据集的快速的，灵活的容器。 数组使你能够在整个数据块上进行数学运算，且与对应的纯量元素间操作有相似的语法。</p>
+<p>ndarray是一个同种类数据的多维容器，也就是说，它的所有元素都是同类型的。每一个数组都有一个 shape （表示它每一维大小的元组）和 dtype （一个描述数组数据类型的对象）。</p>
+<h3 id="数组构建函数">数组构建函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>array</td>
+<td>转换输入数据（列表，数组或其它序列类型）到一个ndarray，可以推断一个dtype或明确的设置一个dtype。默认拷贝输入数据。</td>
+</tr>
+<tr>
+<td>asarray</td>
+<td>转换输入为一个ndarray，当输入已经是一个ndarray时就不拷贝。</td>
+</tr>
+<tr>
+<td>arange</td>
+<td>同内建的range函数，但不返回列表而是一个ndarray</td>
+</tr>
+<tr>
+<td>ones, ones_like</td>
+<td>根据提供的shape和dtype产生一个全1的数组。ones_like</td>
+<td>使用另一歌数组为入参，产生一个shape和dtype都相同的数组。</td>
+</tr>
+<tr>
+<td>zeros, zeros_like</td>
+<td>同ones和ones_like，但是生成全0的数组</td>
+</tr>
+<tr>
+<td>empty, enpty_like</td>
+<td>通过分配新内存来构造新的数组，但不同与ones 和 zeros，不初始任何值。</td>
+</tr>
+<tr>
+<td>eye, identity</td>
+<td>生成一个NxN的单位方阵（对角线上为1，其它地方为0）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dtype">dtype</h3><p>Dtypes是使NumPy如此强大和灵活的一部分。在大多数情况下，它们直接映射到底层的机器表示，这是的很容易地读取和写入二进制流到磁盘上，也能链接低级语言，如C 或Fortran编写的代码。</p>
+<p>你可以使用ndarray的 astype 方法显示的把一个数组的dtype转换或 投射 到另外的类型.</p>
+<h3 id="数组和纯量间的操作">数组和纯量间的操作</h3><p>数组非常重要，因为它们使你不使用循环就可以在数据上进行一系列操作。 这通常被叫做矢量化。相同大小的数组间的算术运算，其操作作用在对应的元素上,纯量的算术操作正如你期望的一样，把操作值作用于每一个元素。</p>
+<h3 id="基本的索引和切片">基本的索引和切片</h3><p>NumPy的索引是一个内容丰富的主题，因为有许多方法可以使你在你的数据中选取一个子集或单个元素。一维的数组很简单，表面上它们的行为类似于Python的列表。</p>
+<p>与列表的第一个重要的区别是数组的切片在原来的数组上（不生成新的数组）。这意味着数据不会被拷贝，且对切片的任何修改都会影响源数组。如果你是使用NumPy的新手，这一点回事你感到惊讶，尤其当你使用过其它数组编程语言，它们非常热衷于拷贝数据。请记住，NumPy是设计用来处理大数据的情况，你可以想象如果NumPy坚持使用拷贝数据将会出现的性能和内存问题。</p>
+<h2 id="通用函数：快速的基于元素的数组函数">通用函数：快速的基于元素的数组函数</h2><p>一个通用的函数，或者 ufunc ，是一个在ndarrays的数据上进行基于元素的操作的函数。你可以认为它们是对简单函数的一个快速矢量化封装，它们接受一个或多个标量值并产生一个或多个标量值。</p>
+<h3 id="Unary_ufuncs">Unary ufuncs</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abs, fabs</td>
+<td>计算基于元素的整形，浮点或复数的绝对值。fabs对于没有复数数据的快速版本</td>
+</tr>
+<tr>
+<td>sqrt</td>
+<td>计算每个元素的平方根。等价于 arr ** 0.5</td>
+</tr>
+<tr>
+<td>square</td>
+<td>计算每个元素的平方。等价于 arr ** 2</td>
+</tr>
+<tr>
+<td>exp</td>
+<td>计算每个元素的指数。</td>
+</tr>
+<tr>
+<td>log, log10, log2, log1p</td>
+<td>自然对数（基于e），基于10的对数，基于2的对数和 log(1 + x)</td>
+</tr>
+<tr>
+<td>sign</td>
+<td>计算每个元素的符号：1(positive)，0(zero)， -1(negative)</td>
+</tr>
+<tr>
+<td>ceil</td>
+<td>计算每个元素的天花板，即大于或等于每个元素的最小值</td>
+</tr>
+<tr>
+<td>floor</td>
+<td>计算每个元素的地板，即小于或等于每个元素的最大值</td>
+</tr>
+<tr>
+<td>rint</td>
+<td>圆整每个元素到最近的整数，保留dtype</td>
+</tr>
+<tr>
+<td>modf</td>
+<td>分别返回分数和整数部分的数组</td>
+</tr>
+<tr>
+<td>isnan</td>
+<td>返回布尔数组标识哪些元素是 NaN （不是一个数）</td>
+</tr>
+<tr>
+<td>isfinite, isinf</td>
+<td>分别返回布尔数组标识哪些元素是有限的（non-inf, non-NaN）或无限的</td>
+</tr>
+<tr>
+<td>cos, cosh, sin sinh, tan, tanh</td>
+<td>regular 和 hyperbolic 三角函数</td>
+</tr>
+<tr>
+<td>arccos, arccosh, arcsin, arcsinh, arctan, arctanh</td>
+<td>反三角函数</td>
+</tr>
+<tr>
+<td>logical_not</td>
+<td>计算基于元素的非x的真值。等价于 -arr</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Binary_universal_funcitons">Binary universal funcitons</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>add</td>
+<td>在数组中添加相应的元素</td>
+</tr>
+<tr>
+<td>substract</td>
+<td>在第一个数组中减去第二个数组</td>
+</tr>
+<tr>
+<td>multiply</td>
+<td>对数组元素相乘</td>
+</tr>
+<tr>
+<td>divide, floor_divide</td>
+<td>除和地板除（去掉余数）</td>
+</tr>
+<tr>
+<td>power</td>
+<td>使用第二个数组作为指数提升第一个数组中的元素</td>
+</tr>
+<tr>
+<td>maximum, fmax</td>
+<td>基于元素的最大值。 fmax 忽略 NaN</td>
+</tr>
+<tr>
+<td>minimum, fmin</td>
+<td>基于元素的最小值。 fmin 忽略 NaN</td>
+</tr>
+<tr>
+<td>mod</td>
+<td>基于元素的模（取余）</td>
+</tr>
+<tr>
+<td>copysign</td>
+<td>拷贝第二个参数的符号到第一个参数</td>
+</tr>
+<tr>
+<td>greater, greater_equal, less, less_equal, not_equal</td>
+<td>基于元素的比较，产生布尔数组。等价于中缀操作符 &gt;, &gt;=, &lt;, &lt;=, ==, !=</td>
+</tr>
+<tr>
+<td>logical_and, logical_or, logical_xor</td>
+<td>计算各个元素逻辑操作的真值。等价于中缀操作符 &amp;,</td>
+<td>, ^</td>
+</tr>
+</tbody>
+</table>
+<h2 id="使用数组进行数据处理">使用数组进行数据处理</h2><p>使用NumPy可以是你能够使用简明的数组表达式而不是编写循环表达许多种类的数据处理任务。这种使用数组表达式代替显示循环通常被成为“矢量化”。在一般情况下，矢量化数组操作比与之等价的纯Python操作数度快一到两（或更多）个等级，这对任何种类的数值计算有最大的影响。</p>
+<h3 id="用数组操作来表达条件逻辑¶">用数组操作来表达条件逻辑¶</h3><p>函数 numpy.where 是三元表达式 x if condition else y 的矢量化版本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xarr = np.array([<span class="number">1.1</span>, <span class="number">1.2</span>, <span class="number">1.3</span>, <span class="number">1.4</span>, <span class="number">1.5</span>])</span><br><span class="line">yarr = np.array([<span class="number">2.1</span>, <span class="number">2.2</span>, <span class="number">2.3</span>, <span class="number">2.4</span>, <span class="number">2.5</span>])</span><br><span class="line">cond = np.array([<span class="keyword">True</span>, <span class="keyword">False</span>, <span class="keyword">True</span>, <span class="keyword">True</span>, <span class="keyword">False</span>])</span><br><span class="line">result = np.where(cond, xarr, yarr)</span><br></pre></td></tr></table></figure>
+<p>np.where 的第一个和第二个参数不需要是数组；它们中的一个或两个可以是纯量。 在数据分析中 where 的典型使用是生成一个新的数组，其值基于另一个数组。假如你有一个矩阵，其数据是随机生成的，你想要把其中的正值替换为2，负值替换为-2</p>
+<h3 id="数学和统计方法">数学和统计方法</h3><p>一组数学函数，计算整个数组或一个轴向上数据的统计，和数组函数一样是容易访问的。聚合（通常被称为 reductions ），如 sun ， mean ，标准偏差 std 可以使用数组实例的方法，也可以使用顶层NumPy的函数</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sum</td>
+<td>对数组的所有或一个轴向上的元素求和。零长度的数组的和为灵。</td>
+</tr>
+<tr>
+<td>mean</td>
+<td>算术平均值。灵长度的数组的均值为NaN。</td>
+</tr>
+<tr>
+<td>std, var</td>
+<td>标准差和方差，有可选的调整自由度（默认值为n）。</td>
+</tr>
+<tr>
+<td>min, max</td>
+<td>最大值和最小值</td>
+</tr>
+<tr>
+<td>argmin, argmax</td>
+<td>索引最小和最大元素。</td>
+</tr>
+<tr>
+<td>cumsum</td>
+<td>从0元素开始的累计和。</td>
+</tr>
+<tr>
+<td>cumprod</td>
+<td>从1元素开始的累计乘。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="线性代数">线性代数</h3><p>线性代数，如矩阵乘法，分解，行列式和其它的方阵数学，对任何一个数组库来说都是重要的部分。不像一些语言，如 MATLAB ，使用 * 来乘两个二维数组是基于元素的乘法，而不是矩阵点积。因此，有一个 dot 函数，是数组的一个方法和 numpy 命名空间中的一个函数，用来进行矩阵乘法运算</p>
+<p>常用 numpy.linglg 函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>diag</td>
+<td>返回一个方阵的对角线（或非对角线）元素为一个一维数组，或者转换一个一维数组到一个方阵（非对角线元素为零）</td>
+</tr>
+<tr>
+<td>dot</td>
+<td>矩阵乘积</td>
+</tr>
+<tr>
+<td>trace</td>
+<td>计算对角线上元素的和</td>
+</tr>
+<tr>
+<td>det</td>
+<td>计算矩阵行列式</td>
+</tr>
+<tr>
+<td>eig</td>
+<td>计算方阵的特征值和特征向量</td>
+</tr>
+<tr>
+<td>inv</td>
+<td>计算方阵转置</td>
+</tr>
+<tr>
+<td>pinv</td>
+<td>计算方阵 Moore-Penrose pseudo-inverse 的转置</td>
+</tr>
+<tr>
+<td>qr</td>
+<td>计算 QR 分解</td>
+</tr>
+<tr>
+<td>svd</td>
+<td>计算奇异值分解（SVD）</td>
+</tr>
+<tr>
+<td>solve</td>
+<td>求解线性系统方程 Ax = b 的x，其中A是一个方阵</td>
+</tr>
+<tr>
+<td>lstsq</td>
+<td>计算 y = Xb 的最小二乘解</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/numpy/"> #numpy </a>
+          
+            <a href="/tags/python/"> #python </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/20/python/pandas-basics/">pandas-basics</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/10/learning to rank/learning to rank/">排序学习learning to rank</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2016/04/19/python/numpy-basics/"
+               data-title="NumPy basics" data-url="/2016/04/19/python/numpy-basics/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">53</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NumPy简介"><span class="nav-number">1.</span> <span class="nav-text">NumPy简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NumPy_ndarray：多维数组对象"><span class="nav-number">1.1.</span> <span class="nav-text">NumPy ndarray：多维数组对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数组构建函数"><span class="nav-number">1.1.1.</span> <span class="nav-text">数组构建函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dtype"><span class="nav-number">1.1.2.</span> <span class="nav-text">dtype</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组和纯量间的操作"><span class="nav-number">1.1.3.</span> <span class="nav-text">数组和纯量间的操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本的索引和切片"><span class="nav-number">1.1.4.</span> <span class="nav-text">基本的索引和切片</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通用函数：快速的基于元素的数组函数"><span class="nav-number">1.2.</span> <span class="nav-text">通用函数：快速的基于元素的数组函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Unary_ufuncs"><span class="nav-number">1.2.1.</span> <span class="nav-text">Unary ufuncs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binary_universal_funcitons"><span class="nav-number">1.2.2.</span> <span class="nav-text">Binary universal funcitons</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用数组进行数据处理"><span class="nav-number">1.3.</span> <span class="nav-text">使用数组进行数据处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用数组操作来表达条件逻辑¶"><span class="nav-number">1.3.1.</span> <span class="nav-text">用数组操作来表达条件逻辑¶</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数学和统计方法"><span class="nav-number">1.3.2.</span> <span class="nav-text">数学和统计方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线性代数"><span class="nav-number">1.3.3.</span> <span class="nav-text">线性代数</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jw-ml"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

@@ -1,0 +1,634 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+    <meta name="description" content="machine learning | python | ai | math" />
+
+
+
+  <meta name="keywords" content="Big Data,data mining," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> 数据挖掘综述 // Jerry's BLOG </title>
+</head>
+
+<body>
+<!--[if lte IE 8]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari." style='margin-left:auto;margin-right:auto;display: block;'/></a></div> <![endif]-->
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Jerry's BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              数据挖掘综述
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-05
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/data-mining/">data mining</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/06/05/data mining/数据挖掘综述/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/05/data mining/数据挖掘综述/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>最近打算系统地学习一下数据挖掘的知识，有几本不错的参考书，一是《数据挖掘导论》，介绍的比较系统。还有一本《Mining of Massive Datasets》，浏览了一下，感觉还不错，而且包含了很多当下比较常见的技术，比如：MapReduce，BigData，PageRank等等，另外Coursera上有与这本书配套的课程：<a href="https://class.coursera.org/mmds-001" target="_blank" rel="external">Coursera MMDS</a>，stanford上也有相关的课程，相关的信息以及资源都可以在本书官网上找到：<a href="http://www.mmds.org/" target="_blank" rel="external">http://www.mmds.org/</a></p>
+<h2 id="数据挖掘任务">数据挖掘任务</h2><p>总体来说，可以将数据挖掘的任务分成四大类：</p>
+<ul>
+<li>预测建模：包括分类与回归</li>
+<li>聚类分析：对数据进行分组，使组内数据尽可能相似，组间数据尽可能不同。</li>
+<li>关联分析：发现数据中的强关联特征的模式。</li>
+<li>异常检测：发现数据中的异常点和离群点，通常也是用聚类的方法来实现异常检测。</li>
+</ul>
+<p>其中，预测建模主要是借助机器学习的算法来实现，这也是数据挖掘和机器学习最重合的一部分内容，但是在数据挖掘中，更强调对数据的处理，更加面向实际的应用场景，而这也恰恰是更能影响最终结果的，因为有很多开源的机器学习算法库可以调用。而聚类分析虽然也使用的部分的机器学习算法，例如k-means等，但是还有很多其他类型的算法，例如基于密度。而关联分析，是数据挖掘独有的内容。</p>
+<h2 id="相关概念的比较">相关概念的比较</h2><p>有很多与数据挖掘相关的术语，例如机器学习、统计分析、人工智能、模式识别等，它们之间的关系也是错综复杂，很难完全界定开，尤其是数据挖掘、机器学习和模式识别这三者，内容上有很多重复。而作者认为：</p>
+<ul>
+<li>机器学习擅长的典型场景是人们对数据中的寻找目标几乎一无所知。</li>
+<li>数据挖掘使用于挖掘的目标能直接地描述时，比如有特殊的结构或关键词。</li>
+</ul>
+<p>台大讲授机器学习的林老师关于这方面的ppt是这样的：</p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/basicConcept/ml-dm.jpg" alt="pic"></p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/basicConcept/ml-ai.jpg" alt="pic"></p>
+<p><img src="http://7xjgct.com1.z0.glb.clouddn.com/Mooc/MMDS/basicConcept/ml-statistics.jpg" alt="pic"></p>
+<p>总结下来就是：</p>
+<ul>
+<li><strong>机器学习</strong>：利用数据从假设空间中找到一个与目标f最接近的假设g。</li>
+<li><strong>数据挖掘</strong>：在大量的数据中找到感兴趣的特性，可以看作是机器学习的一个应用方向。</li>
+<li><strong>人工智能</strong>：机器学习能实现人工智能。</li>
+<li><strong>统计</strong>：利用统计的方法可以实现机器学习。</li>
+</ul>
+<p>下面引用知乎上的一个回答：</p>
+<blockquote>
+<p>机器学习、统计分析、数据挖掘、神经网络、人工智能、模式识别，很难说谁包含于谁，只能分开说每一个概念的意义，谁服务于谁。</p>
+<p>数据挖掘是一种概念，从数据中挖掘到有意义的信息。<br>很多人认为数据挖掘是新学科，是基于大数据，其实不然，如果给你一个数据说李嘉诚有100多亿美元，再给你一个数据是全国平均人均可支配收入水平是13279元人民币，你能挖掘出一个信息叫，李嘉诚很有钱，这也是数据挖掘。只不过很小白而已。</p>
+<p>模式识别是目的，识别出一种模式，比如两个眼睛一个鼻子的是人脸的模式。如果不通过电脑，手工的通过计算来识别模式，也属于模式识别</p>
+<p>机器学习是一种方法，通常用来进行模式识别，用机器去学习不直观的数据得到模式，这其中会需要用到各种各样的知识，比如统计分析的知识。</p>
+<p>人工智能，这个概念就大了，这个概念是想要人工制造出和人类一样的智能，所以很多人就想出了机器人这么一个科幻产物，有人类的智能，并且依托于机器的强大运算能力。事实上，人工智能也不一定要和电脑挂钩的，只不过现在只有电脑有这么强大的计算能力，如果有一天生物科技能够突破，说不定也能实现。（纯属YY）</p>
+<p>神经网络，这是学习算法中的一个很火的模型，它号称结合了多学科，模拟了人的神经过程，是很好的一种学习方法，可以说这个是基于统计学范畴的。</p>
+<p>有什么疑问再问我～</p>
+</blockquote>
+<h2 id="数据挖掘的统计限制">数据挖掘的统计限制</h2><p>数据挖掘涉及到几个重要的问题：</p>
+<ul>
+<li>隐私问题：随着能收集到的数据越来越多，互联网上的每个人将不在透明，指望企业遵守道德保持良心，保护个人隐私，至少在中国是不可能的。</li>
+<li>数据是否可信的问题：数据只是客观的描述，并不能显示出因果关系。因此当你用数据挖掘的结果来推断因果关系时，很容易犯错。而如果只关注挖掘结果的统计特性，那么就可以很好地利用了。</li>
+<li>邦弗朗尼原理：统计上的一个概念，大概意思是，在考察数据时，如果将某些对象视为数据的有趣特征，而这些对象中的许多都可能会在随机数据中出现，那么这些显著的特征就不可依赖。对与那些实际中并不充分罕见的特征来说，上述观察结果限制了从这些数据特征中进行挖掘的能力。</li>
+</ul>
+<h2 id="相关主题">相关主题</h2><h3 id="词语在文档中的重要性">词语在文档中的重要性</h3><p>数据挖掘很多时候都需要根据主题对文档进行分类。但是如何进行分类呢？</p>
+<p>第一步往往是先找到重要的词语，直接的想法就是，认为出现频率最高的词语最重要，但是刚好相反，出现频率最高的往往是‘the’、’and‘这样的没有含义的词。因此在实际处理中，往往先过滤掉这些常见词。</p>
+<p>那么我们找罕见词可以吗？如果一篇文章反复提到一些罕见词，那么很有可能这些词能代表文章主题，因此可以用过滤后的TF（Term Frequency，词频）来表示词语重要性。公式如下，其中<span>$f_{ij}$</span><!-- Has MathJax -->表示词i在文档j中出现的频率，这是归一化的结果，出现频率最高的词TF值为1.</p>
+<p>$$<br>TF<em>{ij} = \frac{f</em>{ij}}{\max<em>k{f</em>{kj}}}<br>$$</p>
+<p>但是只用TF并不准确，为了更好地区分出文档的主题，表现主题的词应该在其他文档中更少出现，这样的词才是更重要的。这种重要性用逆文档频率（IDF， Inverse Document Frequency）来表示。公式如下，其中$n_i$表示词i在所有文档的$n_i$篇中出现。</p>
+<p>$$<br>IDF_i = \log_2{\frac{N}{n_i}}<br>$$</p>
+<p>TF和IDF一般综合起来使用，因此词i在文档j中的得分为$TF_{ij}*IDF_i$。</p>
+<h3 id="哈希函数">哈希函数</h3><p>哈希函数有很多用途，在数据挖掘中主要体现在两个方面：</p>
+<ul>
+<li>利用哈希函数来建立索引，需要保证键值的唯一性，这时哈希桶的数量约等于记录数量，利用哈希可以快速索引。</li>
+<li>利用哈希函数实现大致分类，例如局部敏感哈希（LSH）。选择合适的哈希函数，可以在哈希之后，保留数据的特征，利用相似数据冲突的特点，将相似数据哈希到同一个桶中，从而可以快速实现大致分类，利用这个结果可以进一步进行数据挖掘。</li>
+</ul>
+<p>哈希的大致流程如下：</p>
+<p>$$<br>原始数据 \stackrel{编码}{\longrightarrow} 编码后数据 \stackrel{哈希函数}{\longrightarrow} 桶编号<br>$$</p>
+<h3 id="幂定律">幂定律</h3><p>定义：两个变量在对数空间下呈现出线性关系。</p>
+<p>很多现象中，尤其是排序结果，两个变量之间可以用幂定律关联起来。</p>
+<ul>
+<li><strong>Web图中节点的度</strong> 按照网页的入链数对所有网页排序</li>
+<li><strong>商品的销售</strong> 将商品按照年销量排序</li>
+<li><strong>Web网站的大小</strong> 按照Web站点的网页数目排序</li>
+<li><strong>Zipf定律</strong> 将词语按照出现词频排序，大致结果为$ y=cx^{-1/2} $</li>
+</ul>
+<p><strong>马太效应</strong>：幂定律可以用马太效应来解释，直观说法就是，富者越富。</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Big-Data/"> #Big Data </a>
+          
+            <a href="/tags/data-mining/"> #data mining </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/06/hello-world/">Hello World</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/03/mooc/Mooc-statlearning-Overview/">统计学习二——概述</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2015/06/05/data mining/数据挖掘综述/"
+               data-title="数据挖掘综述" data-url="/2015/06/05/data mining/数据挖掘综述/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/avatar.jpg" alt="Jerry" />
+          <p class="site-author-name">Jerry</p>
+        </div>
+        <p class="site-description motion-element">machine learning | python | ai | math</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">47</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">53</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据挖掘任务"><span class="nav-number">1.</span> <span class="nav-text">数据挖掘任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关概念的比较"><span class="nav-number">2.</span> <span class="nav-text">相关概念的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据挖掘的统计限制"><span class="nav-number">3.</span> <span class="nav-text">数据挖掘的统计限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关主题"><span class="nav-number">4.</span> <span class="nav-text">相关主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#词语在文档中的重要性"><span class="nav-number">4.1.</span> <span class="nav-text">词语在文档中的重要性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哈希函数"><span class="nav-number">4.2.</span> <span class="nav-text">哈希函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幂定律"><span class="nav-number">4.3.</span> <span class="nav-text">幂定律</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2016
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Jerry</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js" id="motion.global"></script>
+
+
+
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jw-ml"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+  
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
